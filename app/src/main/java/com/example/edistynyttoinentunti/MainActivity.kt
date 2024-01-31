@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity() {
 
 // Columnissa voidaan keskittää kaikki sisällä olevat elementit seuraavilla parametreilla
 // Alt + Enter tekee importin
+// harjoitus
 
 @Composable
 fun LoginScreen(){
