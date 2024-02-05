@@ -19,7 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.edistynyttoinentunti.ui.theme.EdistynytToinenTuntiTheme
+import com.example.edistynyttoinentunti.viewmodel.LoginViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +46,10 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun LoginScreen(){
+
+    val loginVm: LoginViewModel = viewModel()
+
+
     val username = remember{
         mutableStateOf("")
     }
@@ -52,15 +58,14 @@ fun LoginScreen(){
     }
     Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
         ) {
-        OutlinedTextField(value = username.value, onValueChange = { newUsername ->
+        OutlinedTextField(value = loginVm.loginState.value.username, onValueChange = { newUsername ->
                 username.value = newUsername
         }, placeholder = {
             Text(text = "Username")
         }) //tämä on tekstikenttä, johon syötetään käyttäjätunnus
         Spacer(modifier = Modifier.height(16.dp)) // Saadaan väliä
-        OutlinedTextField(value = password.value, onValueChange = {
-                                                                  newPassword ->
-                                                                  password.value = newPassword
+        OutlinedTextField(value = loginVm.loginState.value.password, onValueChange = {
+               login loginVm.loginState.value.copy(username = newUsername)
         }, placeholder = {
             Text(text = "Password")
                          })
