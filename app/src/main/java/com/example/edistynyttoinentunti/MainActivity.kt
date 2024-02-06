@@ -17,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -56,19 +57,21 @@ fun LoginScreen(){
     val password = remember {
         mutableStateOf("")
     }
-    Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
         ) {
         OutlinedTextField(value = loginVm.loginState.value.username, onValueChange = { newUsername ->
-                username.value = newUsername
+            loginVm.setUserName(newUsername)
         }, placeholder = {
             Text(text = "Username")
         }) //tämä on tekstikenttä, johon syötetään käyttäjätunnus
         Spacer(modifier = Modifier.height(16.dp)) // Saadaan väliä
-        OutlinedTextField(value = loginVm.loginState.value.password, onValueChange = {
-               login loginVm.loginState.value.copy(username = newUsername)
+        OutlinedTextField(value = loginVm.loginState.value.password, onValueChange = {newPassword ->
+
         }, placeholder = {
             Text(text = "Password")
-                         })
+        }, visualTransformation = PasswordVisualTransformation())
     }
 }
 
