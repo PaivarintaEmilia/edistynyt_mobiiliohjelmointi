@@ -49,7 +49,11 @@ android {
     }
 }
 
+// Uusien kirjastojen asentaminen tapahtuu täällä
 dependencies {
+
+    // Tämä lisättiin, jotta saadaan tehtyä navigaatio
+    implementation("androidx.navigation:navigation-compose:2.7.4")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")

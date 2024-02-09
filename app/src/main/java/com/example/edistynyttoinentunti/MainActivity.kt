@@ -35,6 +35,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.edistynyttoinentunti.ui.theme.EdistynytToinenTuntiTheme
 import com.example.edistynyttoinentunti.viewmodel.LoginViewModel
 
@@ -49,7 +52,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     //LoginScreen() // Näin saadaan luotu composable näytölle (Piilotettiin navigaation teon alussa. Ehkä väliaikaisesti)
-                    val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
+                    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                     val scope = rememberCoroutineScope() // Hampurilaisvalikon avaamista ja sulkemista varten tarvitaan scope (liittyi asyncronosiin funkitoihin)
                     ModalNavigationDrawer(
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
@@ -67,7 +70,9 @@ class MainActivity : ComponentActivity() {
                                     })
                             }
                         }, drawerState = drawerState) {
-                        Text("Welcome home") // Tämä vain lisättiin navigaation rakennuksen yhteydessä -> tulee esille ruutuun
+                        AppNavigation(onMenuClick =  {
+                            // Tähän tulee menu iconin painikkeen painamisen toiminto, koska drawerState on täällä (CategoriesScreen)
+                        })
                     }
                 }
             }
@@ -75,8 +80,19 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// Columnissa voidaan keskittää kaikki sisällä olevat elementit seuraavilla parametreilla
-// Alt + Enter tekee importin
+
+// Tässä aletaan rakentamaan navigaatiota
+@Composable
+fun AppNavigation(onMenuClick: () -> Unit) {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "CategoriesScreen") {
+        // Kaikki elementit joihin pitää pystyä navigoimaan
+        composable(route = "CategoriesScreen") {
+            CategoriesScreen(onMenuClick)
+        }
+
+    }
+}
 
 
 
