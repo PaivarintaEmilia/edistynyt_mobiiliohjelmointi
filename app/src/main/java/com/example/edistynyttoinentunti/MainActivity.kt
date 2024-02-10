@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
@@ -40,6 +41,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.edistynyttoinentunti.ui.theme.EdistynytToinenTuntiTheme
 import com.example.edistynyttoinentunti.viewmodel.LoginViewModel
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,8 +54,9 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     //LoginScreen() // Näin saadaan luotu composable näytölle (Piilotettiin navigaation teon alussa. Ehkä väliaikaisesti)
-                    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+                    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed) // Tämä on suspend functio, koska tässä on animaatio. Suorittaa animaation ja sitten avautuu tai sulkeutuu.
                     val scope = rememberCoroutineScope() // Hampurilaisvalikon avaamista ja sulkemista varten tarvitaan scope (liittyi asyncronosiin funkitoihin)
+                    val navController = rememberNavController() // Mikä tämä on?
                     ModalNavigationDrawer(
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
                         drawerContent = {
@@ -62,17 +65,54 @@ class MainActivity : ComponentActivity() {
                                 NavigationDrawerItem(
                                     label = { Text(text = "Categories_drawer") },
                                     selected = true,
-                                    onClick = { /*TODO*/ }, icon = {
+                                    onClick = { scope.launch { drawerState.close() } }, icon = {
                                         Icon(
                                             imageVector = Icons.Filled.Home,
                                             contentDescription = "Home_Drawer"  // Tämä on tärkeä saatavuuden kannalta
                                         )
                                     })
+                                NavigationDrawerItem(
+                                    label = { Text(text = "Login_drawer") },
+                                    selected = false,
+                                    onClick = { scope.launch {
+                                        navController.navigate("LoginScreen")
+                                        drawerState.close() } },
+                                    icon = {
+                                        Icon(
+                                            imageVector = Icons.Filled.Lock,
+                                            contentDescription = "Login_Drawer"  // Tämä on tärkeä saatavuuden kannalta
+                                        )
+                                    })
                             }
                         }, drawerState = drawerState) {
-                        AppNavigation(onMenuClick =  {
+                        NavHost(navController = navController, startDestination = "CategoriesScreen") {
+                        // Kaikki elementit joihin pitää pystyä navigoimaan
+                           composable(route = "CategoriesScreen") {
+                                CategoriesScreen(onMenuClick = {
+                                    scope.launch {
+                                        drawerState.open()
+                                    }
+                                }) // Ei sulkuja koska ei haluta kutsua vaan lähetetään vain eteenpäin composable puussa
+                            }
+                           composable("loginScreen") {
+                               LoginScreen(goToCategories = {
+                                   navController.navigate("categoriesScreen") // CallBack löytyy loginScreen tiedostosta
+                               })
+                           }
+
+                        }
+                        /*AppNavigation(onMenuClick =  {
                             // Tähän tulee menu iconin painikkeen painamisen toiminto, koska drawerState on täällä (CategoriesScreen)
-                        })
+                            // NavigatorDrawerin state on täällä
+                            // Eli lisätään scopen sisään napin fukntiot.
+                            scope.launch {
+                                if(drawerState.currentValue == DrawerValue.Closed) {
+                                    drawerState.open() // Voi olla että jätetään vaan tämä koska nappia ei näy
+                                } else {
+                                    drawerState.close()
+                                }
+                            } // Tämä kaikki kommentoitu, koska opesta tämä oli sekavaa.
+                        }) */
                     }
                 }
             }
@@ -80,19 +120,19 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
+// TARKASTELE TÄTÄ VAIKKA POISTETTIINKIN
 // Tässä aletaan rakentamaan navigaatiota
-@Composable
-fun AppNavigation(onMenuClick: () -> Unit) {
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "CategoriesScreen") {
+//@Composable
+//fun AppNavigation(onMenuClick: () -> Unit) {
+//    val navController = rememberNavController()
+    //NavHost(navController = navController, startDestination = "CategoriesScreen") {
         // Kaikki elementit joihin pitää pystyä navigoimaan
-        composable(route = "CategoriesScreen") {
-            CategoriesScreen(onMenuClick)
-        }
+    //    composable(route = "CategoriesScreen") {
+    //        CategoriesScreen(onMenuClick) // Ei sulkuja koska ei haluta kutsua vaan lähetetään vain eteenpäin composable puussa
+    //    }
 
-    }
-}
+    //} Otetaan tämä osa pois koska opettaja sanoi, että tämä sekoittaa kun meennään usean composablen läpi
+//}
 
 
 

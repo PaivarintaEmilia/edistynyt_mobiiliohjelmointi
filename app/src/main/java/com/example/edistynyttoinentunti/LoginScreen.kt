@@ -21,7 +21,7 @@ import com.example.edistynyttoinentunti.viewmodel.LoginViewModel
 
 // Tämä oli aluksi siis MainActivityssa ja siirrettiin navigaation rakentamisen ajaksi tänne.
 @Composable
-fun LoginScreen(){
+fun LoginScreen(goToCategories: () -> Unit){
 
     val loginVm: LoginViewModel = viewModel()
 
@@ -60,7 +60,11 @@ fun LoginScreen(){
                 Spacer(modifier = Modifier.height(16.dp)) // Saadaan väliä
                 // Lisätään Login-painike.
                 // Enabled. Määrittää ehdon, että jos username ja password on tyhjä niin nappia ei voida painaa.
-                Button(enabled = loginVm.loginState.value.username != "" && loginVm.loginState.value.password != "", onClick = { loginVm.login() }) {
+                Button(enabled = loginVm.loginState.value.username != "" && loginVm.loginState.value.password != "",
+                    onClick = {
+                        loginVm.login()
+                        goToCategories() // Navigoi meidät categories sceereeen. Composablessa kerrotaan mitä tässä oikeasti tapahtuu.
+                    }) {
                     Text(text = "Login")
                 }
             }
