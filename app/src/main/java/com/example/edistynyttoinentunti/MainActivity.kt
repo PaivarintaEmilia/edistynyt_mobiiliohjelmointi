@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
@@ -81,6 +82,18 @@ class MainActivity : ComponentActivity() {
                                         Icon(
                                             imageVector = Icons.Filled.Lock,
                                             contentDescription = "Login_Drawer"  // Tämä on tärkeä saatavuuden kannalta
+                                        )
+                                    })
+                                NavigationDrawerItem(
+                                    label = { Text(text = "My_own_drawer") },
+                                    selected = false,
+                                    onClick = { scope.launch {
+                                        navController.navigate("LoginScreen")
+                                        drawerState.close() } },
+                                    icon = {
+                                        Icon(
+                                            imageVector = Icons.Filled.ShoppingCart,
+                                            contentDescription = "My_own_Drawer"  // Tämä on tärkeä saatavuuden kannalta
                                         )
                                     })
                             }
