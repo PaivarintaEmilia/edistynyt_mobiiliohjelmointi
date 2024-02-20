@@ -52,6 +52,10 @@ android {
 // Uusien kirjastojen asentaminen tapahtuu täällä
 dependencies {
 
+    // Lisättiin nämä APIa varten. Gson on Googlen json-kirjasto
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
     // Tämä lisättiin, jotta saadaan tehtyä navigaatio
     implementation("androidx.navigation:navigation-compose:2.7.4")
 

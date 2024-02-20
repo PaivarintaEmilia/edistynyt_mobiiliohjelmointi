@@ -98,7 +98,7 @@ class MainActivity : ComponentActivity() {
                                     })
                             }
                         }, drawerState = drawerState) {
-                        NavHost(navController = navController, startDestination = "CategoriesScreen") {
+                        NavHost(navController = navController, startDestination = "postsScreen") {
                         // Kaikki elementit joihin pitää pystyä navigoimaan
                            composable(route = "CategoriesScreen") {
                                 CategoriesScreen(onMenuClick = {
@@ -112,6 +112,10 @@ class MainActivity : ComponentActivity() {
                                    navController.navigate("categoriesScreen") // CallBack löytyy loginScreen tiedostosta
                                })
                            }
+                            // Tässä tehdään uusi composable api kutsun harjoitusta varten. Luodaan tähän, jotta ei tarvitse luoda nappia.
+                            composable(route="postsScreen") {
+                                PostsScreen()
+                            }
 
                         }
                         /*AppNavigation(onMenuClick =  {

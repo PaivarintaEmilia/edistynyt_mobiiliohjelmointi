@@ -13,7 +13,7 @@ data class LoginReqModel(
 data class LoginResModel(
     val id: Int = 0, // Tämä on responsessa luotu id käyttäjälle. Oletusarvo on 0.
     val accessToken: String = "", //Tämä tulee aina loginin yhteydessä. Vielä ei tarvitse tietää mistä on kyse.
-    val username: String = "" // Tämän avulla voidaan luoda ilmoitus "Hei KÄyttäjä
+    val username: String = "" // Tämän avulla voidaan luoda ilmoitus "Hei KÄyttäjä + username!"
 
     )
 
