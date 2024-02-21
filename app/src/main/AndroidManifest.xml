@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Riippuvuus, joka lisätään API a varten. Näin applikaatiolla on oikeus käyttää internettiä. -->
-    <uses-permission android:name="android.permission.INTERNET/" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
 
     <application
