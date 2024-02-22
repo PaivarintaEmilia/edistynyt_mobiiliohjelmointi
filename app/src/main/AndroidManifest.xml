@@ -5,9 +5,12 @@
     <!-- Riippuvuus, joka lisätään API a varten. Näin applikaatiolla on oikeus käyttää internettiä. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Pitää erikseen sallia suojaamattoman yhteyden data haku. Tämä tehtiin API requesteja varten. -->
+    <!-- siksi pätkä android:usesCleartextTraffic="true-->
 
     <application
         android:allowBackup="true"
+        android:usesCleartextTraffic="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"

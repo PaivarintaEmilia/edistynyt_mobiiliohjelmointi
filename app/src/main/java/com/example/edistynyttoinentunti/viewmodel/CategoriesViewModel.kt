@@ -5,6 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.edistynyttoinentunti.api.categoriesService
 import com.example.edistynyttoinentunti.model.CategoriesState
 import com.example.edistynyttoinentunti.model.CategoryItem
 import kotlinx.coroutines.delay
@@ -39,17 +40,16 @@ class CategoriesViewModel : ViewModel() {
     private fun getCategories() {
 
         viewModelScope.launch {
-            _categoriesState.value = _categoriesState.value.copy(loading = true) // Tämä on false Categories.kt puolella
-            waitForCategories() // Odotetaan 2 sekunttia
-            // Data tulee sisään. Huom käytetään luokkaa Categories.kt puolelta
-            _categoriesState.value = categoriesState.value.copy(
-                loading = false,
-                list = listOf(
-                    CategoryItem(id = 1, name = "Kateogoria1"),
-                    CategoryItem(id = 2, name = "Kategoria2"))
-            )
+            try {
+                _categoriesState.value = _categoriesState.value.copy(loading = true) // Tämä on false Categories.kt puolella
+                val response = categoriesService.getCategories()
+                // Data tulee sisään. Huom käytetään luokkaa Categories.kt puolelta
+                _categoriesState.value = categoriesState.value.copy(
+                    loading = false,
+                    list = response.categories // Tämä tehtiin käsin tehdyn listan tilalle.
+                )
+            } catch (e: Exception) {}
+
         }
     }
-
-
 }

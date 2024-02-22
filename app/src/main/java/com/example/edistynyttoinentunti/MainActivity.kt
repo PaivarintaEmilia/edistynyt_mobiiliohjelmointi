@@ -98,7 +98,7 @@ class MainActivity : ComponentActivity() {
                                     })
                             }
                         }, drawerState = drawerState) {
-                        NavHost(navController = navController, startDestination = "postsScreen") {
+                        NavHost(navController = navController, startDestination = "categoriesScreen") {
                         // Kaikki elementit joihin pitää pystyä navigoimaan
 
                             // Tässä tehdään uusi composable api kutsun harjoitusta varten. Luodaan tähän, jotta ei tarvitse luoda nappia.
@@ -106,7 +106,7 @@ class MainActivity : ComponentActivity() {
                                 PostsScreen()
                             }
 
-                           composable(route = "CategoriesScreen") {
+                           composable(route = "categoriesScreen") {
                                 CategoriesScreen(onMenuClick = {
                                     scope.launch {
                                         drawerState.open()

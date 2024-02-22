@@ -38,23 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.edistynyttoinentunti.viewmodel.CategoriesViewModel
 
-//Näin saadaan preview näkymä käyttöön, muuten ei tarpeellinen
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview
-@Composable
-fun CategoriesScreenPreview() {
-
-    Scaffold(topBar = {
-        TopAppBar(title = { Text(text = "Categories") }, navigationIcon = {
-            IconButton(onClick = {  }) {
-                Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
-            }
-        } )
-    }) {
-        LazyColumn(modifier = Modifier.padding(it)) {}
-    }
-}
-// Tämä tehtiin vain, jotta voidaan tarkastella navigaatiota
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -91,7 +74,7 @@ fun CategoriesScreen(onMenuClick: () -> Unit) {
                                 horizontalArrangement = Arrangement.SpaceBetween) {
                                 Text(text = "Kuva tähän myöhemmin")
                                 Column(horizontalAlignment = Alignment.End) {
-                                    Text(text = it.name, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.headlineLarge)
+                                    Text(text = it.category_name, fontWeight = FontWeight.SemiBold, style = MaterialTheme.typography.headlineLarge)
                                     IconButton(onClick = { /*TODO*/ }) {
                                         Icon(
                                             imageVector = Icons.Rounded.Delete,
