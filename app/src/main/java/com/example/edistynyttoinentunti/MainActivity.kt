@@ -111,6 +111,8 @@ class MainActivity : ComponentActivity() {
                                     scope.launch {
                                         drawerState.open()
                                     }
+                                }, navigateToEditCategoty = {
+                                    navController.navigate("editCategoryScreen/${it}") // Tämä lisättiin, jotta päästään category screenistä editcategoryscreeniin
                                 }) // Ei sulkuja koska ei haluta kutsua vaan lähetetään vain eteenpäin composable puussa
                             }
                            composable("loginScreen") {
@@ -118,6 +120,10 @@ class MainActivity : ComponentActivity() {
                                    navController.navigate("categoriesScreen") // CallBack löytyy loginScreen tiedostosta
                                })
                            }
+                            composable("editCategoryScreen/{categoryid}") {
+                                EditCategoryScreen()
+                                }
+
 
                         }
                         /*AppNavigation(onMenuClick =  {

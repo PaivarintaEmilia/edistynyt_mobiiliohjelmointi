@@ -45,10 +45,15 @@ class CategoriesViewModel : ViewModel() {
                 val response = categoriesService.getCategories()
                 // Data tulee sisään. Huom käytetään luokkaa Categories.kt puolelta
                 _categoriesState.value = categoriesState.value.copy(
-                    loading = false,
                     list = response.categories // Tämä tehtiin käsin tehdyn listan tilalle.
                 )
-            } catch (e: Exception) {}
+            } catch (e: Exception) {
+                _categoriesState.value = _categoriesState.value.copy(err=e.message)
+            } finally {
+                // Tämä tehdään joka tapauksessa tulee try tai catch
+                // sama kuin loading = false
+                _categoriesState.value = _categoriesState.value.copy(loading = false)
+            }
 
         }
     }
