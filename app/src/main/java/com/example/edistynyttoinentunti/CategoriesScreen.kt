@@ -127,7 +127,5 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategoty: (Int) -> U
                 }
             }
         } // Box loppuu tähän
-
-
     }
 }

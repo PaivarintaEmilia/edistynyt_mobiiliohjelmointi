@@ -21,6 +21,8 @@ class CategoriesViewModel : ViewModel() {
     private val _categoriesState = mutableStateOf(CategoriesState())
 
     // Julkinen vastine jotta voidaan käyttää composablessa
+    // pitää sisällään tiedot useista kategorioista, kuten niiden lataustilan ja mahdolliset virheet
+    // Käytetään näyttämään kategorioiden lista käyttöliittymässä
     val categoriesState: State<CategoriesState> = _categoriesState
 
     init {

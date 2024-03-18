@@ -37,3 +37,9 @@ data class CategoryItem(
 // Tämä tehdään, jotta APIssa CategoriesApi tietää odottavansa oikeanmuotoista dataa.
 // Datassa on id:n ja stringin lisäksi otsikko. Tämän takia yllä oleva CategoriesItem on lisätty listaan categories..
 data class CategoriesResponse(val categories: List<CategoryItem> = emptyList())
+
+
+// Tämä lisätään, koska tarvotaan yksittäisen kategorian data (ei listaa kaikista kuten yllä)
+// Tieto tarvitaan EditCategoryScreenia varten --> Jotta tiedetään, minkä kategorian nimeä muokataan
+data class CategoryResponse(val category: CategoryItem = CategoryItem())
+// Tämä on oletuksena tyhjä categoria itemi
