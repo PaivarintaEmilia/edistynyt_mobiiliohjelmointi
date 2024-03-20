@@ -28,7 +28,7 @@ import com.example.edistynyttoinentunti.viewmodel.CategoryViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditCategoryScreen() {
+fun EditCategoryScreen(backToCategories : () -> Unit, goToCategories : () -> Unit) {
 
     // kutsutaan viewmodelia
     val vm: CategoryViewModel = viewModel()
@@ -36,9 +36,9 @@ fun EditCategoryScreen() {
     // Alla luodaan komponentteja ja sisältöä näytölle
     Scaffold (
         topBar = {
-            TopAppBar(title = { Text("Entre title here") },
+            TopAppBar(title = { Text(vm.categoryState.value.item.name) }, // Tämä on yläbannerin title, joka saadaan db:stä.
                 navigationIcon = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { backToCategories() }) {
                         Icon(imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Back to categories")
                     }
@@ -68,13 +68,17 @@ fun EditCategoryScreen() {
                         // Ensin luodaan tekstikenttä
                         OutlinedTextField(
                             value = vm.categoryState.value.item.name, // Categoryn nimi. Mistä tulee?
-                            onValueChange = {})
+                            onValueChange = {
+                                // Täällä kutsutaan setName funktiota, jotta saadaan uusi kategorian nimi asetettua
+                                // Kun se kirjoitetaan tekstikenttään
+                                vm.setName(it)
+                            })
                         
                         // Lisätään tilaa eri komponenttien välille
                         Spacer(modifier = Modifier.height(8.dp))
                         
                         // Luodaan painike
-                        Button(onClick = { /*TODO*/ }) {
+                        Button(onClick = { vm.editCategory(goToCategories) }) {
                             Text("Edit")
                         }
                         

@@ -16,7 +16,7 @@ data class CategoriesState(
 )
 
 
-// editcategoryn vuoksi tehdään tämä!!!!!!!!
+// editcategoryn vuoksi tehdään tämä!!!!!!!! Pero por qué?
 data class CategoryState(
     val item: CategoryItem = CategoryItem(),
     val loading: Boolean = false,
@@ -43,3 +43,11 @@ data class CategoriesResponse(val categories: List<CategoryItem> = emptyList())
 // Tieto tarvitaan EditCategoryScreenia varten --> Jotta tiedetään, minkä kategorian nimeä muokataan
 data class CategoryResponse(val category: CategoryItem = CategoryItem())
 // Tämä on oletuksena tyhjä categoria itemi
+
+
+// Tämä luodaan, jotta saadaan tehtyä @PUT requesti CategoriesApi tiedostossa.
+// Api rajapinnasta näkee myös saman tämän mitä tarvitaan requestin tekemiseen.
+data class EditCategoryReq(
+    @SerializedName("category_name")
+    val name: String
+)

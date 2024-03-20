@@ -121,7 +121,11 @@ class MainActivity : ComponentActivity() {
                                })
                            }
                             composable("editCategoryScreen/{categoryid}") {
-                                EditCategoryScreen()
+                                EditCategoryScreen(backToCategories = {
+                                    navController.navigateUp() // Navigoi automaattisesti takaisin aikaisempaan screeniin
+                                }, goToCategories = {
+                                    navController.navigate("categoriesScreen")
+                                })
                                 }
 
 

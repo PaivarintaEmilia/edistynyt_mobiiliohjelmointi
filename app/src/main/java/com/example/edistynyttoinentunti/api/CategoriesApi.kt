@@ -2,8 +2,11 @@ package com.example.edistynyttoinentunti.api
 
 import com.example.edistynyttoinentunti.model.CategoriesResponse
 import com.example.edistynyttoinentunti.model.CategoryResponse
+import com.example.edistynyttoinentunti.model.EditCategoryReq
 import com.example.edistynyttoinentunti.model.Post
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 
@@ -28,5 +31,14 @@ interface CategoriesApi {
     // Palauttaa yksittäisen categorian datan. (vai pekän id:n?)
     @GET("category/{id}")
     suspend fun getCategory(@Path("id") id: Int): CategoryResponse
+
+
+    // Tämä luodaan, jotta saadaan vaihdettua categorian nimi myös DB:ssä asti. Kategorian nimi vaihdetaan
+    // EditCategoriesName.kt tiedostossa.
+    // @Body tarkoittee, että requesti ottaa bodysta tätä seuraavan muuttujan
+    @PUT("category({id}")
+    suspend fun editCategory(@Path("id") id: Int, @Body editCategoryReq: EditCategoryReq) : CategoryResponse
+
+
 
 }
