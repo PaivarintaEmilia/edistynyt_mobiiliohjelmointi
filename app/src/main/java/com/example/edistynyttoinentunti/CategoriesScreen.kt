@@ -61,6 +61,9 @@ fun RandomImage() {
 fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategoty: (Int) -> Unit) {
     // Tämä on rakennusteline, joka antaa navigaatiolle raamit
     val categoriesVm: CategoriesViewModel = viewModel()
+
+
+
     // Tähän voi itse sitten lisäillä omia osia kuten topBarin
     Scaffold(topBar = {
         TopAppBar(title = { Text(text = "Categories") }, navigationIcon = {
@@ -107,7 +110,7 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategoty: (Int) -> U
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
                                     )
-                                    IconButton(onClick = { /*TODO*/ }) {
+                                    IconButton(onClick = { categoriesVm.deleteCategoryById(it.id) }) {
                                         Icon(
                                             imageVector = Icons.Rounded.Delete,
                                             contentDescription = "Kategorian poistonpainike")

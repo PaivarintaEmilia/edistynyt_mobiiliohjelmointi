@@ -33,6 +33,27 @@ class CategoriesViewModel : ViewModel() {
     }
 
 
+    // Tehdään funktio, jossa poistetaan category itemi listalta ihan vaan käyttöliittymästä
+    // Tarvitaan poistettavan categorian id, jotta tiedetään mitä categoriaa ollaan poistamassa
+    fun deleteCategoryById(categoryId: Int) {
+        // Otetaan käyttöön list-muuttuja
+        _categoriesState.value.list
+        // List sisältää kaikki category itemit listassa. Filtteröidään tämä lista.
+        val listOfCategories = _categoriesState.value.list.filter {
+            // Yksittäinen category item on "it". Filtteri käy listan jokaisen itemin läpi. Jokaisella iteroinnilla it on tämän listan rown category
+            // Eli jos listan category itemin id ei ole poistettavan categoryn id niin se lisätään listaan. Poistettava jätetään pois
+            // Again --> Lista sisältää ne categoryItemit johon alla oleva ehto ei päde (lisätään siis listaan ja poistettava jää pois)
+            categoryId != it.id
+        }
+
+        // Asetetaan uuden listan arvot list-muuttujaan
+        _categoriesState.value = _categoriesState.value.copy(list = listOfCategories)
+
+        // --> Nyt kun painetaan Delete-painiketta niin näytölle tulostuu uusi lista ilman poistettua categorya
+
+    }
+
+
     private suspend fun waitForCategories() {
         delay(2000)
     }
