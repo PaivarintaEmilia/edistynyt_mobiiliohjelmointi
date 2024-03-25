@@ -21,6 +21,12 @@ class CategoryViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
     val categoryState: State<CategoryState> = _categoryState
 
 
+    // Pitää tehdä funktio, jotta voidaan muuttaa ok-funktion statusta EditScreenisssa.
+    fun setOk(status: Boolean) {
+        _categoryState.value = _categoryState.value.copy(ok = status)
+    }
+
+
     init {
         // Tässä tulee kutsua getCategory() funktiota. Muuten se ei näy käyttöliittymässä.
         // Funktiossa ymmärtääkseni haetaan kategorian nimi ja id
@@ -42,14 +48,14 @@ class CategoryViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
     // Tämä funktio tehdään, jotta editScreenissa nappia Edit painamalla päästään takaisin kategorioiden listaus screenille
     // vai onko tämä sittenkin, sitä varten, että saadaan muokattua db:ssä myös kategorian nimi?
-    fun editCategory(goToCategories : () -> Unit) {
+    fun editCategory() {
         viewModelScope.launch {
             try {
                 _categoryState.value = _categoryState.value.copy(loading = true)
                 // Mikä tämä on ja mistä tämä koostuu?
                 categoriesService.editCategory(_categoryId, EditCategoryReq(name=_categoryState.value.item.name))
                 Log.d("Emilia", "done")
-                goToCategories()
+                setOk(true) // Kun categorian muokkaus onnistuu niin asetetaan ok-muuttuja trueksi, jotta EditScreenin launch effectissä tiedetään että setOk on true ja voidaan navigoida takaisin listaukseen
             } catch (e: Exception) {
                 _categoryState.value = _categoryState.value.copy(err = e.toString())
             }finally {

@@ -19,6 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -32,6 +33,22 @@ fun EditCategoryScreen(backToCategories : () -> Unit, goToCategories : () -> Uni
 
     // kutsutaan viewmodelia
     val vm: CategoryViewModel = viewModel()
+
+
+    // Tämä tehdään, jotta edit-napista päästään takaisin categorioiden listaukseen
+    // EditCategorysta halutaan poistua vain, kun categoryn muokkaus onnistuu
+    LaunchedEffect(key1 = vm.categoryState.value.ok,) {
+        // kun muokkaus onnistuu niin siirrytään takaisin Category listauksen screeniin
+        if(vm.categoryState.value.ok) {
+            // Muutetaan ok-muuttuja takaisin falseksi (muutettiin vm:ssä trueksi, kun muokkaus onnistuu)
+            vm.setOk(false)
+            // Siirrytään takaisin screeniin mistä tultiin
+            goToCategories()
+        }
+    }
+
+
+
     // Scaffouldi
     // Alla luodaan komponentteja ja sisältöä näytölle
     Scaffold (
@@ -78,7 +95,7 @@ fun EditCategoryScreen(backToCategories : () -> Unit, goToCategories : () -> Uni
                         Spacer(modifier = Modifier.height(8.dp))
                         
                         // Luodaan painike
-                        Button(onClick = { vm.editCategory(goToCategories) }) {
+                        Button(onClick = { vm.editCategory() }) {
                             Text("Edit")
                         }
                         

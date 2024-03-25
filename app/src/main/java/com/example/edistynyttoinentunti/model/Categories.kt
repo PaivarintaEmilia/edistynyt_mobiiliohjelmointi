@@ -20,6 +20,7 @@ data class CategoriesState(
 data class CategoryState(
     val item: CategoryItem = CategoryItem(),
     val loading: Boolean = false,
+    val ok: Boolean = false, // Tämä tehdään, jotta edit-painikkeesta päästään siirtymään takaisin category listaan (EditCategoryScreen)
     val err: String? = null
 )
 
