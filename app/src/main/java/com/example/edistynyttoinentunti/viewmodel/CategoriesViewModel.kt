@@ -9,22 +9,30 @@ import androidx.lifecycle.viewModelScope
 import com.example.edistynyttoinentunti.api.categoriesService
 import com.example.edistynyttoinentunti.model.CategoriesState
 import com.example.edistynyttoinentunti.model.CategoryItem
+import com.example.edistynyttoinentunti.model.DeleteCAtegoryState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class CategoriesViewModel : ViewModel() {
 
-
+    // NÄMÄ STATET KOSKETTAVAT CATEGORIES-LISTAA
     // Tänne yhdistetään seuraavalla tunnilla Categories.kt tiedostossa olevat luokat
     //  Tässä pitää näkyä lista kategorioista, joita meillä tulee olemaan meidän softassa
-
-
     private val _categoriesState = mutableStateOf(CategoriesState())
 
     // Julkinen vastine jotta voidaan käyttää composablessa
     // pitää sisällään tiedot useista kategorioista, kuten niiden lataustilan ja mahdolliset virheet
     // Käytetään näyttämään kategorioiden lista käyttöliittymässä
     val categoriesState: State<CategoriesState> = _categoriesState
+
+
+    // NÄMÄ STATET OVAT CATEGORIAN POISTON ALERT-VIESTIÄ VARTEN (Koska on eri käyttötapaus niin tehdään uusi state)
+    private val _deleteCategoryState = mutableStateOf(DeleteCAtegoryState())
+
+    // Julkinen (getteri privaatille statelle, luetaan dataa ei voida muuttaa)
+    val deleteCategoryState: State<DeleteCAtegoryState> = _deleteCategoryState
+
+
 
     init {
         // Init on blokki, joka voidaan ajaa primary contruktorin ajamisen jälkeen.
@@ -34,10 +42,18 @@ class CategoriesViewModel : ViewModel() {
     }
 
 
+    // Tämä funktio on sitä varten, että saadaan asetettua poistettavan categoryn id stateen alert-viestiä varten
+    fun verifyCategoryRemoval(categoryId: Int) {
+        // Kun käyttöliittymässä painetaan roskis-iconia niin kutsutaan tätä funktiota
+        // Muutetaan staten valueta niin, että id:stä tulee category id
+        _deleteCategoryState.value = _deleteCategoryState.value.copy(id = categoryId)
+    }
+
+
     // Tehdään funktio, jossa poistetaan category itemi listalta ihan vaan käyttöliittymästä
     // Tarvitaan poistettavan categorian id, jotta tiedetään mitä categoriaa ollaan poistamassa
     fun deleteCategoryById(categoryId: Int) {
-        // Kutsutaan rajapintakutsua
+        // Kutsutaan rajapintakutsua (vasta alertin vahvistuksen jälkeen)
         viewModelScope.launch {
             try {
 

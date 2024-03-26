@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,6 +30,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -55,6 +57,25 @@ fun RandomImage() {
         contentDescription = "random image"
     )
 }
+
+// Tehdään oma composable toiminnolle, jossa kysytään käyttäjältä haluaako tämä poistaa categoryn listalta ALERT-VIESTI
+// Muokataan koodia niin, että täällä tapahtuukin poisto
+@Composable
+fun ConfirmCategoryDelete(onConfirm: () -> Unit, onCancel: () -> Unit) {
+    AlertDialog(onDismissRequest = { /*TODO*/ }, confirmButton = { 
+        TextButton(onClick = { onConfirm() }) {
+            Text("Delete")
+        }        
+    }, dismissButton = {
+        // Tällä painikkeella tehdään poiston peruutus
+        TextButton(onClick = { onCancel() }) {
+            Text("Cancel")
+        }
+    }, title = {
+        Text(text = "Are you sure you want to delete the category?")
+    })
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,6 +109,17 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategoty: (Int) -> U
                 // Tämä tehtiin virheen tarkistusta varten
                 categoriesVm.categoriesState.value.err != null -> Text(text = "Tuli virhe: ${categoriesVm.categoriesState.value.err}")
 
+                // Tämä tehdään categorian poiston alert-viestin kutsua varten.
+                // Jos id on suurempi kuin 0 niin ollaan clickattu roskis-iconia ja näytetään alert-viesti
+                categoriesVm.deleteCategoryState.value.id > 0 -> ConfirmCategoryDelete(onConfirm = {
+                    categoriesVm.deleteCategoryById(categoriesVm.deleteCategoryState.value.id)
+                }, onCancel = {
+                    // Muutetaan tila takaisin 0:ksi, kun käyttäjä ei haluakaan poistaa categoria
+                    categoriesVm.verifyCategoryRemoval(0)
+                })
+                    
+
+
 
                 // jos ei lataa niin näytetään sisältö näytöllä
                 else -> LazyVerticalGrid(columns = GridCells.Fixed(1)) {
@@ -110,7 +142,7 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategoty: (Int) -> U
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
                                     )
-                                    IconButton(onClick = { categoriesVm.deleteCategoryById(it.id) }) {
+                                    IconButton(onClick = { categoriesVm.verifyCategoryRemoval(it.id) }) {
                                         Icon(
                                             imageVector = Icons.Rounded.Delete,
                                             contentDescription = "Kategorian poistonpainike")

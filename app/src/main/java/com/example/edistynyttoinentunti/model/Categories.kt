@@ -25,6 +25,15 @@ data class CategoryState(
 )
 
 
+// Uusi data classi poiston Alert-viestin statea varten (CategoriesViewModel)
+data class DeleteCAtegoryState(
+    // Id jota ollaan poistamassa
+    val id: Int = 0,
+    // Errorviesti
+    val error: String? = null
+)
+
+
 // Mitä yksittäinen kategoria pitää sisällään
 data class CategoryItem(
     // Serialized name liittyy pythonin ja kotlinin nimeämiskäytäntöihin
