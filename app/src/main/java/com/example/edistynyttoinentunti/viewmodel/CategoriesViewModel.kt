@@ -1,5 +1,6 @@
 package com.example.edistynyttoinentunti.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.Recomposer
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -36,20 +37,39 @@ class CategoriesViewModel : ViewModel() {
     // Tehdään funktio, jossa poistetaan category itemi listalta ihan vaan käyttöliittymästä
     // Tarvitaan poistettavan categorian id, jotta tiedetään mitä categoriaa ollaan poistamassa
     fun deleteCategoryById(categoryId: Int) {
-        // Otetaan käyttöön list-muuttuja
-        _categoriesState.value.list
-        // List sisältää kaikki category itemit listassa. Filtteröidään tämä lista.
-        val listOfCategories = _categoriesState.value.list.filter {
-            // Yksittäinen category item on "it". Filtteri käy listan jokaisen itemin läpi. Jokaisella iteroinnilla it on tämän listan rown category
-            // Eli jos listan category itemin id ei ole poistettavan categoryn id niin se lisätään listaan. Poistettava jätetään pois
-            // Again --> Lista sisältää ne categoryItemit johon alla oleva ehto ei päde (lisätään siis listaan ja poistettava jää pois)
-            categoryId != it.id
+        // Kutsutaan rajapintakutsua
+        viewModelScope.launch {
+            try {
+
+                // Tehdään poisto requesti (Api-filessa) Deletestä ei tule responsea vain vastaus onko ok vai ei.
+                // TÄMÄ ON DB:TÄ VARTEN
+                categoriesService.removeCategory(categoryId)
+
+                // TÄMÄ ON SITÄ VARTEN, ETTÄ SAADAAN KÄYTTÖLIITTYMÄSTÄ MYÖS POISTETTUA TÄMÄ
+                // List sisältää kaikki category itemit listassa. Filtteröidään tämä lista.
+                val listOfCategories = _categoriesState.value.list.filter {
+                    // Yksittäinen category item on "it". Filtteri käy listan jokaisen itemin läpi. Jokaisella iteroinnilla it on tämän listan rown category
+                    // Eli jos listan category itemin id ei ole poistettavan categoryn id niin se lisätään listaan. Poistettava jätetään pois
+                    // Again --> Lista sisältää ne categoryItemit johon alla oleva ehto ei päde (lisätään siis listaan ja poistettava jää pois)
+                    categoryId != it.id
+                }
+
+                // Asetetaan uuden listan arvot list-muuttujaan
+                _categoriesState.value = _categoriesState.value.copy(list = listOfCategories)
+                // --> Nyt kun painetaan Delete-painiketta niin näytölle tulostuu uusi lista ilman poistettua categorya
+
+
+
+            } catch (e: Exception) {
+
+                // Tässä vaiheessa vielä logitetaan vain poiston virheviesti
+                Log.d("Emilia", e.toString() )
+
+            } finally {
+
+                // Tähän tulee sitten jossain vaiheessa loading spinnerin falsettaminen
+            }
         }
-
-        // Asetetaan uuden listan arvot list-muuttujaan
-        _categoriesState.value = _categoriesState.value.copy(list = listOfCategories)
-
-        // --> Nyt kun painetaan Delete-painiketta niin näytölle tulostuu uusi lista ilman poistettua categorya
 
     }
 

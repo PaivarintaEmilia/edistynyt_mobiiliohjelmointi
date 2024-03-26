@@ -5,6 +5,7 @@ import com.example.edistynyttoinentunti.model.CategoryResponse
 import com.example.edistynyttoinentunti.model.EditCategoryReq
 import com.example.edistynyttoinentunti.model.Post
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -31,6 +32,11 @@ interface CategoriesApi {
     // Palauttaa yksittäisen categorian datan. (vai pekän id:n?)
     @GET("category/{id}")
     suspend fun getCategory(@Path("id") id: Int): CategoryResponse
+
+
+    // Yksittäisen kategorian poisto. Tätä kutsutaan categoriesvm:ssä
+    @DELETE("category/{id}")
+    suspend fun removeCategory(@Path("id") id: Int)
 
 
     // Tämä luodaan, jotta saadaan vaihdettua categorian nimi myös DB:ssä asti. Kategorian nimi vaihdetaan
