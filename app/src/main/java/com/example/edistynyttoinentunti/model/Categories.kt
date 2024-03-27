@@ -12,7 +12,17 @@ import com.google.gson.annotations.SerializedName
 data class CategoriesState(
     val list: List<CategoryItem> = emptyList(),
     val loading: Boolean = false,
-    val err: String? = null
+    val err: String? = null,
+    val isAddingCategory: Boolean = false
+)
+
+
+// Categorian lisäys alert-ilmoituksessa
+data class AddCategoryState(
+    val loading: Boolean = false,
+    val ok: Boolean = false, // Koska suljetaan alert vasta kun ollaan saatu bd:ssä ok viesti
+    val err: String? = null,
+    val name: String =""
 )
 
 

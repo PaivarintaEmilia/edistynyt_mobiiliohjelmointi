@@ -20,15 +20,18 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -60,6 +63,26 @@ fun RandomImage() {
     )
 }
 
+// Tehdään alert-ilmoitus, jossa voidaan lisätä uusi categoria
+@Composable
+fun AddCategoryDialog(addCategory: () -> Unit, name: String) {
+
+    AlertDialog(
+        onDismissRequest = { /*TODO*/ },
+        confirmButton = {
+                        TextButton(onClick = { addCategory() }) {
+                            Text("Save Category")
+                        }
+        },
+        title = { Text("Add category")},
+        text = {
+            OutlinedTextField(value = name, onValueChange = {}, placeholder = { Text("Category name") })
+        })
+}
+
+
+
+
 // Tehdään oma composable toiminnolle, jossa kysytään käyttäjältä haluaako tämä poistaa categoryn listalta ALERT-VIESTI
 // Muokataan koodia niin, että täällä tapahtuukin poisto
 @Composable
@@ -75,7 +98,7 @@ fun ConfirmCategoryDelete(onConfirm: () -> Unit, onCancel: () -> Unit, clearErr 
     LaunchedEffect(key1 = errString) {
 
         // Laitetaan ehto sisälle, missä sanotaan, että jos muuttuja ei ole null niin suorita koodi
-        // Voitaisiin käyttää if-funktiota myös mutta let toimii sen tilalla | if(errString != null)
+        // Voitaisiin käyttää if-funktiota myös mutta let toimii sen tilalla | if(errString != null)A
         errString?.let {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
             clearErr()
@@ -109,7 +132,16 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategoty: (Int) -> U
 
 
     // Tähän voi itse sitten lisäillä omia osia kuten topBarin
-    Scaffold(topBar = {
+    Scaffold(
+
+        // Tässä tulee + -painike, jolla voidaan lisätä categoria
+        floatingActionButton = {
+                               FloatingActionButton(onClick = { categoriesVm.toggleAddCategory() }) {
+                                   Icon(imageVector = Icons.Filled.Add, contentDescription = "Lisää categoria")
+                               }
+        },
+
+        topBar = {
         TopAppBar(title = { Text(text = "Categories") }, navigationIcon = {
             IconButton(onClick = { onMenuClick() }) {
                 Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
@@ -128,6 +160,10 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategoty: (Int) -> U
                     Alignment.Center
                     )
                 )
+
+
+                // Esitetään alert-ilmoitus, kunvm:ssä toggleAddCategory() funktion muuttujassa tila muuttuu ja näytetään alert AddCategoryDialog()
+                categoriesVm.categoriesState.value.isAddingCategory -> AddCategoryDialog(addCategory = )
 
                 // Tämä tehtiin virheen tarkistusta varten
                 categoriesVm.categoriesState.value.err != null -> Text(text = "Tuli virhe: ${categoriesVm.categoriesState.value.err}")

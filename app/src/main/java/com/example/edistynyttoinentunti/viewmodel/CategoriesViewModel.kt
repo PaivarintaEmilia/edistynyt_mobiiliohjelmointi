@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.edistynyttoinentunti.api.categoriesService
+import com.example.edistynyttoinentunti.model.AddCategoryState
 import com.example.edistynyttoinentunti.model.CategoriesState
 import com.example.edistynyttoinentunti.model.CategoryItem
 import com.example.edistynyttoinentunti.model.DeleteCAtegoryState
@@ -19,7 +20,6 @@ class CategoriesViewModel : ViewModel() {
     // Tänne yhdistetään seuraavalla tunnilla Categories.kt tiedostossa olevat luokat
     //  Tässä pitää näkyä lista kategorioista, joita meillä tulee olemaan meidän softassa
     private val _categoriesState = mutableStateOf(CategoriesState())
-
     // Julkinen vastine jotta voidaan käyttää composablessa
     // pitää sisällään tiedot useista kategorioista, kuten niiden lataustilan ja mahdolliset virheet
     // Käytetään näyttämään kategorioiden lista käyttöliittymässä
@@ -28,9 +28,13 @@ class CategoriesViewModel : ViewModel() {
 
     // NÄMÄ STATET OVAT CATEGORIAN POISTON ALERT-VIESTIÄ VARTEN (Koska on eri käyttötapaus niin tehdään uusi state)
     private val _deleteCategoryState = mutableStateOf(DeleteCAtegoryState())
-
     // Julkinen (getteri privaatille statelle, luetaan dataa ei voida muuttaa)
     val deleteCategoryState: State<DeleteCAtegoryState> = _deleteCategoryState
+
+
+    // STATET KATEGORIAN LISÄYSTÄ VARTEN
+    private val _addCategoryState = mutableStateOf(AddCategoryState())
+    val addCategoryState: State<AddCategoryState> = _addCategoryState
 
 
 
@@ -39,6 +43,18 @@ class CategoriesViewModel : ViewModel() {
         // Täällä tehdään myös rajapintakutsut. Tämä pyöritetään, heti näytön käynnistyttyä. (Tälle näytölle haetaan dataa tietokannasta.)
         // Täällä voidaan kutsua getCategories()-fukntiota ilman, että tulee ikilooppi.
         getCategories()
+    }
+
+
+    // Uusi funktio, jolla päivitetään tekstikentän arvo, kun siihen kirjoitetaan alertissa uusi kategorian nimi
+    fun setNAme(newName: String) {
+        _addCategoryState.value = _addCategoryState.value.copy(name = newName)
+    }
+
+
+    // Tehdään funktio, jota kutsutaan, kun painetaan screenin + -painiketta. Aktivoidaan isAddingCategory-muuttuja (boolean)
+    fun toggleAddCategory() {
+        _categoriesState.value = _categoriesState.value.copy(isAddingCategory = !_categoriesState.value.isAddingCategory)
     }
 
 
