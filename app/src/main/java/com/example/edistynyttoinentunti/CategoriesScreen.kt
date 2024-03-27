@@ -1,6 +1,7 @@
 package com.example.edistynyttoinentunti
 
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -61,8 +63,27 @@ fun RandomImage() {
 // Tehdään oma composable toiminnolle, jossa kysytään käyttäjältä haluaako tämä poistaa categoryn listalta ALERT-VIESTI
 // Muokataan koodia niin, että täällä tapahtuukin poisto
 @Composable
-fun ConfirmCategoryDelete(onConfirm: () -> Unit, onCancel: () -> Unit) {
-    AlertDialog(onDismissRequest = { /*TODO*/ }, confirmButton = { 
+fun ConfirmCategoryDelete(onConfirm: () -> Unit, onCancel: () -> Unit, clearErr : () -> Unit,  errString: String?) {
+
+    // Tämä tehdään, koska currentia ei voida käyttää alla olevan launchedEffecting sisällä muuten
+    val context = LocalContext.current
+
+    // Launched effect on sama kuin viewModel scope mutta vm:ää ei voi käyttää tässä.
+    // Siksi käytetään LaunchedEffectiä. Se siis kuuntelee, muuttuuko muuttuja ja suorittaa..
+    // .. sisällä olevan koodin näin tapahtuessa. Tässä tapauksessa näytetään tost-ilmoitus, jos ..
+    // .. kategorian poiston yhteydessä tulee virheviesti. Onko errStr null?
+    LaunchedEffect(key1 = errString) {
+
+        // Laitetaan ehto sisälle, missä sanotaan, että jos muuttuja ei ole null niin suorita koodi
+        // Voitaisiin käyttää if-funktiota myös mutta let toimii sen tilalla | if(errString != null)
+        errString?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            clearErr()
+        }
+    }
+
+
+    AlertDialog(onDismissRequest = { /*TODO*/ }, confirmButton = {
         TextButton(onClick = { onConfirm() }) {
             Text("Delete")
         }        
@@ -73,6 +94,8 @@ fun ConfirmCategoryDelete(onConfirm: () -> Unit, onCancel: () -> Unit) {
         }
     }, title = {
         Text(text = "Are you sure you want to delete the category?")
+    }, text = {
+        Text(text = "U sure??")
     })
 }
 
@@ -116,7 +139,11 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategoty: (Int) -> U
                 }, onCancel = {
                     // Muutetaan tila takaisin 0:ksi, kun käyttäjä ei haluakaan poistaa categoria
                     categoriesVm.verifyCategoryRemoval(0)
-                })
+                }, clearErr = {
+                              // Kutsutaan viewModelin funktiota, jota tarvitaan errorString-muuttujan muuttamiseen nulliksi
+                              categoriesVm.clearErr()
+                },
+                    categoriesVm.deleteCategoryState.value.error) // Näytetään käyttäjälle myös virheviesti. Tulee näkyä alert-dialogissa. Siksi uusi err parametri (löytyy funktiosta)
                     
 
 

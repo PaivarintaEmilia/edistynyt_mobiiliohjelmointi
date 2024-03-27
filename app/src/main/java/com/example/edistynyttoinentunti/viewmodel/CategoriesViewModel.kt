@@ -42,6 +42,12 @@ class CategoriesViewModel : ViewModel() {
     }
 
 
+    // _deleteCategoryStaten error tulee saada nulliksi tostin virheilmoitusta varten
+    fun clearErr() {
+        _deleteCategoryState.value = _deleteCategoryState.value.copy(error = null)
+    }
+
+
     // Tämä funktio on sitä varten, että saadaan asetettua poistettavan categoryn id stateen alert-viestiä varten
     fun verifyCategoryRemoval(categoryId: Int) {
         // Kun käyttöliittymässä painetaan roskis-iconia niin kutsutaan tätä funktiota
@@ -74,12 +80,22 @@ class CategoriesViewModel : ViewModel() {
                 _categoriesState.value = _categoriesState.value.copy(list = listOfCategories)
                 // --> Nyt kun painetaan Delete-painiketta niin näytölle tulostuu uusi lista ilman poistettua categorya
 
+                // Kun poisto on onnistunut niin muutetaan deleteState 0:ksi
+                // Koska ehto on: jos id on suurempi kuin 0 niin näytetään alert niin ei näytetä alerttia enää kun poisto ok
+                _deleteCategoryState.value = _deleteCategoryState.value.copy(id = 0)
+
 
 
             } catch (e: Exception) {
 
                 // Tässä vaiheessa vielä logitetaan vain poiston virheviesti
                 Log.d("Emilia", e.toString() )
+
+                // Tehdään jotta saadaan tost-virheviesti näkymään jos poiston yhteydessä tulee virhe
+                // Jos tätä ei ole niin tost-viestiä ei näy ollenkaan.
+                _deleteCategoryState.value = _deleteCategoryState.value.copy(error = e.toString())
+
+
 
             } finally {
 
