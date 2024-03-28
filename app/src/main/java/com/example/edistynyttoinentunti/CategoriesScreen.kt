@@ -27,6 +27,7 @@ import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -65,10 +66,10 @@ fun RandomImage() {
 
 // Tehdään alert-ilmoitus, jossa voidaan lisätä uusi categoria
 @Composable
-fun AddCategoryDialog(addCategory: () -> Unit, name: String) {
+fun AddCategoryDialog(addCategory: () -> Unit, name: String, setName: (String) -> Unit, closeDialog: () -> Unit) {
 
     AlertDialog(
-        onDismissRequest = { /*TODO*/ },
+        onDismissRequest = { closeDialog() },
         confirmButton = {
                         TextButton(onClick = { addCategory() }) {
                             Text("Save Category")
@@ -76,7 +77,12 @@ fun AddCategoryDialog(addCategory: () -> Unit, name: String) {
         },
         title = { Text("Add category")},
         text = {
-            OutlinedTextField(value = name, onValueChange = {}, placeholder = { Text("Category name") })
+            OutlinedTextField(
+                value = name,
+                onValueChange = {newName ->
+                // Tässä päivitetään uusi arvo stateen, sen mukaan mitä käyttäjä kirjoittaa
+                setName(newName) },
+                placeholder = { Text("Category name") })
         })
 }
 
@@ -133,7 +139,7 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategoty: (Int) -> U
 
     // Tähän voi itse sitten lisäillä omia osia kuten topBarin
     Scaffold(
-
+        floatingActionButtonPosition = FabPosition.Center, // Keskitetään plus-painike
         // Tässä tulee + -painike, jolla voidaan lisätä categoria
         floatingActionButton = {
                                FloatingActionButton(onClick = { categoriesVm.toggleAddCategory() }) {
@@ -163,7 +169,19 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategoty: (Int) -> U
 
 
                 // Esitetään alert-ilmoitus, kunvm:ssä toggleAddCategory() funktion muuttujassa tila muuttuu ja näytetään alert AddCategoryDialog()
-                categoriesVm.categoriesState.value.isAddingCategory -> AddCategoryDialog(addCategory = )
+                categoriesVm.categoriesState.value.isAddingCategory -> AddCategoryDialog(
+                    addCategory = {
+                                  categoriesVm.createCategory()
+                    },
+                    name = categoriesVm.addCategoryState.value.name,
+                    setName = {newName ->
+                        categoriesVm.setNAme(newName)
+                    },
+                    closeDialog = {
+                        categoriesVm.toggleAddCategory()
+                    }
+
+                )
 
                 // Tämä tehtiin virheen tarkistusta varten
                 categoriesVm.categoriesState.value.err != null -> Text(text = "Tuli virhe: ${categoriesVm.categoriesState.value.err}")

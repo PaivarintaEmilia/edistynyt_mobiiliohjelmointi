@@ -71,3 +71,9 @@ data class EditCategoryReq(
     @SerializedName("category_name")
     val name: String
 )
+
+data class AddCategoryReq(
+    @SerializedName("category_name")
+    val name: String
+)
+

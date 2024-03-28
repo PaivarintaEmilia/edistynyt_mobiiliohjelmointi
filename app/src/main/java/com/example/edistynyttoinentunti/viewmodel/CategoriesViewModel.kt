@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.edistynyttoinentunti.api.categoriesService
+import com.example.edistynyttoinentunti.model.AddCategoryReq
 import com.example.edistynyttoinentunti.model.AddCategoryState
 import com.example.edistynyttoinentunti.model.CategoriesState
 import com.example.edistynyttoinentunti.model.CategoryItem
@@ -43,6 +44,33 @@ class CategoriesViewModel : ViewModel() {
         // Täällä tehdään myös rajapintakutsut. Tämä pyöritetään, heti näytön käynnistyttyä. (Tälle näytölle haetaan dataa tietokannasta.)
         // Täällä voidaan kutsua getCategories()-fukntiota ilman, että tulee ikilooppi.
         getCategories()
+    }
+
+    // Tässä kutsutaan POST-requestia ja tätä funktiota sitten kutsutaan taas screenissa
+    fun createCategory() {
+        viewModelScope.launch {
+            try {
+                _addCategoryState.value = _addCategoryState.value.copy(loading = true)
+
+                // Tästä tulee vastauksena päivitetty categoriaItem
+                val res = categoriesService.createCategory(
+                    AddCategoryReq(
+                        name = _addCategoryState.value.name
+                    )
+                )
+
+                // Lisätään res-muuttuja eli uusi categoria staten listaan
+                _categoriesState.value = _categoriesState.value.copy(list = _categoriesState.value.list + res)
+
+                // Suljetaan alert-ilmoitus, kun categorian lisäys on ok
+                toggleAddCategory()
+
+            } catch (e: Exception) {
+                _addCategoryState.value = _addCategoryState.value.copy(err = e.toString())
+            } finally {
+                _addCategoryState.value = _addCategoryState.value.copy(loading = false)
+            }
+        }
     }
 
 
