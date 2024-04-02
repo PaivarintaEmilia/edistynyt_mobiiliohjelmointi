@@ -82,7 +82,7 @@ fun AddCategoryDialog(addCategory: () -> Unit, name: String, setName: (String) -
                 onValueChange = {newName ->
                 // Tässä päivitetään uusi arvo stateen, sen mukaan mitä käyttäjä kirjoittaa
                 setName(newName) },
-                placeholder = { Text("Category name") })
+                placeholder = { Text("Category name n") })
         })
 }
 
