@@ -9,6 +9,7 @@
     <!-- siksi pätkä android:usesCleartextTraffic="true-->
 
     <application
+        android:name=".login.CustomApp"
         android:allowBackup="true"
         android:usesCleartextTraffic="true"
         android:dataExtractionRules="@xml/data_extraction_rules"

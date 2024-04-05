@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -51,6 +52,11 @@ android {
 
 // Uusien kirjastojen asentaminen tapahtuu täällä
 dependencies {
+
+    // Lisätään nämä loginia varten
+    kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-common:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
 
     // Lisättiin nämä APIa varten. Gson on Googlen json-kirjasto
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
