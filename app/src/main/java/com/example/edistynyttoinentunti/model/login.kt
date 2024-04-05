@@ -3,6 +3,7 @@ package com.example.edistynyttoinentunti.model
 
 // Login sivun alku muuttujat
 data class LoginReqModel(
+    val err: String? = null,
     val username: String = "",
     val password: String = "",
     val loading: Boolean = false
