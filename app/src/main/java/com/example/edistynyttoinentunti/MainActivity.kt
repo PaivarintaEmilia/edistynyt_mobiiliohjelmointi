@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -40,9 +41,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.edistynyttoinentunti.login.logOutViewModel
 import com.example.edistynyttoinentunti.ui.theme.EdistynytToinenTuntiTheme
 import com.example.edistynyttoinentunti.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
+
+
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +59,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val vm: logOutViewModel = viewModel() // Logouttia varten yhdistettiin tänne. Tämä kokeilu
                     //LoginScreen() // Näin saadaan luotu composable näytölle (Piilotettiin navigaation teon alussa. Ehkä väliaikaisesti)
                     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed) // Tämä on suspend functio, koska tässä on animaatio. Suorittaa animaation ja sitten avautuu tai sulkeutuu.
                     val scope = rememberCoroutineScope() // Hampurilaisvalikon avaamista ja sulkemista varten tarvitaan scope (liittyi asyncronosiin funkitoihin)
@@ -96,9 +102,30 @@ class MainActivity : ComponentActivity() {
                                             contentDescription = "My_own_Drawer"  // Tämä on tärkeä saatavuuden kannalta
                                         )
                                     })
+                                NavigationDrawerItem(
+                                    label = { Text(text = "Log_out_drawer") },
+                                    selected = false,
+                                    onClick = { scope.launch {
+                                        vm.logout()
+                                        if (vm.logoutState.value.logoutOk) {
+                                            vm.setLogout(false)
+                                            navController.navigate("LoginScreen") {
+                                                popUpTo("LoginScreen") {
+                                                    inclusive = true
+                                                }
+                                            }
+                                        }
+
+                                        drawerState.close() } },
+                                    icon = {
+                                        Icon(
+                                            imageVector = Icons.Filled.ExitToApp,
+                                            contentDescription = "Logout_Drawer"  // Tämä on tärkeä saatavuuden kannalta
+                                        )
+                                    })
                             }
                         }, drawerState = drawerState) {
-                        NavHost(navController = navController, startDestination = "categoriesScreen") {
+                        NavHost(navController = navController, startDestination = "LoginScreen") {
                         // Kaikki elementit joihin pitää pystyä navigoimaan
 
                             // Tässä tehdään uusi composable api kutsun harjoitusta varten. Luodaan tähän, jotta ei tarvitse luoda nappia.

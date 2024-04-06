@@ -24,6 +24,22 @@ data class LoginResModel(
 
 
 
+// Logouttia varten uusi data class
+
+data class LogoutState(
+    val loading: Boolean = false,
+    val err: String? = null,
+    val logoutOk: Boolean = false
+)
+
+
+
+
+
+
+
+
+
 // ApiRequestia varten data classit, kirjautumiseen NÄITÄ EI TARVITA. MUISTUTUKSENA TÄÄLLÄ ITELLE.
 
 data class AuthReq(

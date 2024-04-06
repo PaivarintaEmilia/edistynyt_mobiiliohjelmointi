@@ -11,6 +11,7 @@ import com.example.edistynyttoinentunti.login.AccountEntity
 import com.example.edistynyttoinentunti.login.DbProvider
 import com.example.edistynyttoinentunti.model.LoginReqModel
 import com.example.edistynyttoinentunti.model.LoginResModel
+import com.example.edistynyttoinentunti.model.LogoutState
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -19,10 +20,12 @@ import kotlinx.coroutines.launch
 
 
 class LoginViewModel(private val db: AccountDatabase = DbProvider.db) : ViewModel() {
+
     // Tätä voidaan muuttaa
     private val _loginState = mutableStateOf(LoginReqModel())
-    // Tätä ei voida muuttaa
+    // Tätä käytetään screenin puolella
     val loginState: State<LoginReqModel> = _loginState
+
 
     // funktio joka asettaa uuden usernamen. Argumenttina käytetään uutta käyttäjätunnusta. Kutsutaan OutlinedTextFieldissä screenissä.
     fun setUserName(newUsername: String) {
