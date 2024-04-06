@@ -1,5 +1,7 @@
 package com.example.edistynyttoinentunti.model
 
+import com.google.gson.annotations.SerializedName
+
 
 // Login sivun alku muuttujat
 data class LoginReqModel(
@@ -13,9 +15,20 @@ data class LoginReqModel(
 
 data class LoginResModel(
     val id: Int = 0, // Tämä on responsessa luotu id käyttäjälle. Oletusarvo on 0.
+    @SerializedName("access_token")
     val accessToken: String = "", //Tämä tulee aina loginin yhteydessä. Vielä ei tarvitse tietää mistä on kyse.
     val username: String = "" // Tämän avulla voidaan luoda ilmoitus "Hei KÄyttäjä + username!"
 
     )
 
 
+
+// ApiRequestia varten data classit, kirjautumiseen NÄITÄ EI TARVITA. MUISTUTUKSENA TÄÄLLÄ ITELLE.
+
+data class AuthReq(
+    val username: String = "",
+    val password: String = "")
+data class AuthRes(
+    @SerializedName("access_token")
+    val accessToken: String = ""
+)

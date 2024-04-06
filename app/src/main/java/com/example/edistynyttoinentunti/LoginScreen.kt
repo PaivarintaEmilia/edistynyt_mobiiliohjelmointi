@@ -64,7 +64,7 @@ fun LoginScreen(goToCategories: () -> Unit){
                         placeholder = {
                             Text(text = "Username_hint")
                         }) //tämä on tekstikenttä, johon syötetään käyttäjätunnus
-                    Spacer(modifier = Modifier.height(16.dp)) // Saadaan väliä
+                    Spacer(modifier = Modifier.height(25.dp)) // Saadaan väliä
                     OutlinedTextField(
                         value = loginVm.loginState.value.password,
                         onValueChange = { newPassword ->
