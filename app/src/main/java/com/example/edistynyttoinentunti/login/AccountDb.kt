@@ -29,7 +29,7 @@ abstract class AccountDao {
     abstract suspend fun addToken(entity: AccountEntity)
 
     // Toinen annotaatio millä haetaan viimeiseksi luotu accessToken
-    @Query("SELECT accessToken FROM account LIMIT 1;")
+    @Query("SELECT accessToken FROM account ORDER BY id DESC LIMIT 1;")
     abstract suspend fun getToken() : String?
 }
 

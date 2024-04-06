@@ -8,7 +8,8 @@ data class LoginReqModel(
     val err: String? = null,
     val username: String = "",
     val password: String = "",
-    val loading: Boolean = false
+    val loading: Boolean = false,
+    val logOk: Boolean = false // Muuttuja loginin tarkistukselle
 )
 
 // Vastaus, kun login-tiedot on syötetty ja painetaan login-painiketta

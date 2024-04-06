@@ -1,5 +1,6 @@
 package com.example.edistynyttoinentunti
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,8 +16,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -29,6 +32,27 @@ import com.example.edistynyttoinentunti.viewmodel.LoginViewModel
 fun LoginScreen(goToCategories: () -> Unit){
 
     val loginVm: LoginViewModel = viewModel()
+
+    // Virheilmoituksen lisäys tostiin niin näyttää siistimmältä
+    // Uudet koodit alkavat tästä
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = loginVm.loginState.value.err) {
+        loginVm.loginState.value.err?.let {
+            Toast.makeText(context, loginVm.loginState.value.err, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    // Kuunnellaan logOk-muuttujaa. Jos kirjautuminen on ok niin navigoidaan categories-screeniin.
+
+    LaunchedEffect(key1 = loginVm.loginState.value.logOk) {
+        if (loginVm.loginState.value.logOk) {
+            // Asetetaan muuttuja takaisin falseksi
+            loginVm.setLogin(false)
+            // Tilasiirtymä
+            goToCategories()
+        }
+    }
 
     Scaffold(topBar = {
         TopAppBar(title = { Text("LogIn") })
@@ -81,7 +105,7 @@ fun LoginScreen(goToCategories: () -> Unit){
                     Button(enabled = loginVm.loginState.value.username != "" && loginVm.loginState.value.password != "",
                         onClick = {
                             loginVm.login()
-                            goToCategories() // Navigoi meidät categories sceereeen. Composablessa kerrotaan mitä tässä oikeasti tapahtuu.
+                            //goToCategories() // Navigoi meidät categories sceereeen. Composablessa kerrotaan mitä tässä oikeasti tapahtuu.
                         }) {
                         Text(text = "Login")
                     }

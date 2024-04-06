@@ -6,6 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.edistynyttoinentunti.api.authService
+import com.example.edistynyttoinentunti.login.AccountDatabase
+import com.example.edistynyttoinentunti.login.AccountEntity
+import com.example.edistynyttoinentunti.login.DbProvider
 import com.example.edistynyttoinentunti.model.LoginReqModel
 import com.example.edistynyttoinentunti.model.LoginResModel
 import com.google.gson.annotations.SerializedName
@@ -15,7 +18,7 @@ import kotlinx.coroutines.launch
 
 
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(private val db: AccountDatabase = DbProvider.db) : ViewModel() {
     // Tätä voidaan muuttaa
     private val _loginState = mutableStateOf(LoginReqModel())
     // Tätä ei voida muuttaa
@@ -40,6 +43,11 @@ class LoginViewModel : ViewModel() {
         delay(2000)
     }
 
+    // Funktio logOk-muuttujan vaihtamiselle
+    fun setLogin(ok: Boolean) {
+        _loginState.value = _loginState.value.copy(logOk = ok)
+    }
+
     // Loading on aluksi false. Tässä funktiossa se muutetaan loginstaten loading
     fun login() {
 
@@ -61,6 +69,14 @@ class LoginViewModel : ViewModel() {
                     )
                 )
                 Log.d("Emilia", res.accessToken) // Toimii
+
+                // Yhdistetään room-tietokanta viewmodeliin
+                db.accountDao().addToken(
+                    AccountEntity(accessToken = res.accessToken)
+                )
+
+                // Kun login on ok niin muutetaan logOk muuttuja trueksi funktion avulla
+                setLogin(true)
 
 
             } catch (e: Exception) {
