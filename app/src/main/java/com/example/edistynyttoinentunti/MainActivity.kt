@@ -82,7 +82,7 @@ class MainActivity : ComponentActivity() {
                                     label = { Text(text = "Login_drawer") },
                                     selected = false,
                                     onClick = { scope.launch {
-                                        navController.navigate("LoginScreen")
+                                        navController.navigate(Screen.Login.route)
                                         drawerState.close() } },
                                     icon = {
                                         Icon(
@@ -94,7 +94,7 @@ class MainActivity : ComponentActivity() {
                                     label = { Text(text = "My_own_drawer") },
                                     selected = false,
                                     onClick = { scope.launch {
-                                        navController.navigate("LoginScreen")
+                                        navController.navigate(Screen.Login.route)
                                         drawerState.close() } },
                                     icon = {
                                         Icon(
@@ -109,8 +109,8 @@ class MainActivity : ComponentActivity() {
                                         vm.logout()
                                         if (vm.logoutState.value.logoutOk) {
                                             vm.setLogout(false)
-                                            navController.navigate("LoginScreen") {
-                                                popUpTo("LoginScreen") {
+                                            navController.navigate(Screen.Login.route) {
+                                                popUpTo(Screen.Login.route) {
                                                     inclusive = true
                                                 }
                                             }
@@ -120,38 +120,39 @@ class MainActivity : ComponentActivity() {
                                     icon = {
                                         Icon(
                                             imageVector = Icons.Filled.ExitToApp,
-                                            contentDescription = "Logout_Drawer"  // Tämä on tärkeä saatavuuden kannalta
+                                            contentDescription = "Logout_Drawer"  // Tämä on tärkeä
+                                        // saatavuuden kannalta
                                         )
                                     })
                             }
                         }, drawerState = drawerState) {
-                        NavHost(navController = navController, startDestination = "LoginScreen") {
+                        NavHost(navController = navController, startDestination = "loginScreen") {
                         // Kaikki elementit joihin pitää pystyä navigoimaan
 
                             // Tässä tehdään uusi composable api kutsun harjoitusta varten. Luodaan tähän, jotta ei tarvitse luoda nappia.
-                            composable(route="postsScreen") {
+                            composable(route= Screen.PostsScreen.route) {
                                 PostsScreen()
                             }
 
-                           composable(route = "categoriesScreen") {
+                           composable(route = Screen.Categories.route) {
                                 CategoriesScreen(onMenuClick = {
                                     scope.launch {
                                         drawerState.open()
                                     }
                                 }, navigateToEditCategoty = {
-                                    navController.navigate("editCategoryScreen/${it}") // Tämä lisättiin, jotta päästään category screenistä editcategoryscreeniin
+                                    navController.navigate("${Screen.EditCategoryScreen.route}/${it}") // Tämä lisättiin, jotta päästään category screenistä editcategoryscreeniin
                                 }) // Ei sulkuja koska ei haluta kutsua vaan lähetetään vain eteenpäin composable puussa
                             }
-                           composable("loginScreen") {
+                           composable(Screen.Login.route) {
                                LoginScreen(goToCategories = {
-                                   navController.navigate("categoriesScreen") // CallBack löytyy loginScreen tiedostosta
+                                   navController.navigate(Screen.Categories.route) // CallBack löytyy loginScreen tiedostosta
                                })
                            }
                             composable("editCategoryScreen/{categoryid}") {
                                 EditCategoryScreen(backToCategories = {
                                     navController.navigateUp() // Navigoi automaattisesti takaisin aikaisempaan screeniin
                                 }, goToCategories = {
-                                    navController.navigate("categoriesScreen")
+                                    navController.navigate(Screen.Categories.route)
                                 })
                                 }
 

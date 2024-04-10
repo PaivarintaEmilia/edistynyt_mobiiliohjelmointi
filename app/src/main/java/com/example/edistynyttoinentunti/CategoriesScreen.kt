@@ -43,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -148,7 +149,7 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategoty: (Int) -> U
         },
 
         topBar = {
-        TopAppBar(title = { Text(text = "Categories") }, navigationIcon = {
+        TopAppBar(title = { Text(text = stringResource(id = R.string.categories)) }, navigationIcon = {
             IconButton(onClick = { onMenuClick() }) {
                 Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
             }
