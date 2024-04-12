@@ -62,7 +62,7 @@ class LoginViewModel(private val db: AccountDatabase = DbProvider.db) : ViewMode
                 //viewModelScope on valmiiksi tullut viewmodelista. Sitä tarvitaan, että voidaan käyttää suspendia normaalin funktion sisällä.
                 _waitForLogin()
                 // Tähän tulee login.kt:ssä luodut loginResModelin asiat. Mikä tämä on?
-                val user = LoginResModel()
+                //val user = LoginResModel()
 
                 // Kutsu
                 val res = authService.login(

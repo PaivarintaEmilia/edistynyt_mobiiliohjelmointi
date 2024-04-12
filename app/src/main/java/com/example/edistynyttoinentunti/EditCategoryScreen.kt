@@ -61,7 +61,7 @@ fun EditCategoryScreen(backToCategories : () -> Unit, goToCategories : () -> Uni
                     }
                 })
         }
-    ) {
+    ) { it ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -104,5 +104,4 @@ fun EditCategoryScreen(backToCategories : () -> Unit, goToCategories : () -> Uni
             }
         }
     }
-
 }

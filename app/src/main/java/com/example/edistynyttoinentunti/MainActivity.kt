@@ -54,6 +54,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             EdistynytToinenTuntiTheme {
+                // Mobiilioptimointi
+                val windowSizeInfo = rememberWindowSize()
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -126,7 +128,7 @@ class MainActivity : ComponentActivity() {
                                     })
                             }
                         }, drawerState = drawerState) {
-                        NavHost(navController = navController, startDestination = "loginScreen") {
+                        NavHost(navController = navController, startDestination = Screen.Login.route) {
                         // Kaikki elementit joihin pitää pystyä navigoimaan
 
                             // Tässä tehdään uusi composable api kutsun harjoitusta varten. Luodaan tähän, jotta ei tarvitse luoda nappia.
@@ -141,14 +143,14 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }, navigateToEditCategoty = {
                                     navController.navigate("${Screen.EditCategoryScreen.route}/${it}") // Tämä lisättiin, jotta päästään category screenistä editcategoryscreeniin
-                                }) // Ei sulkuja koska ei haluta kutsua vaan lähetetään vain eteenpäin composable puussa
+                                }, size = windowSizeInfo) // Ei sulkuja koska ei haluta kutsua vaan lähetetään vain eteenpäin composable puussa
                             }
                            composable(Screen.Login.route) {
                                LoginScreen(goToCategories = {
                                    navController.navigate(Screen.Categories.route) // CallBack löytyy loginScreen tiedostosta
                                })
                            }
-                            composable("editCategoryScreen/{categoryid}") {
+                            composable("editCategoryScreen/{category}") {
                                 EditCategoryScreen(backToCategories = {
                                     navController.navigateUp() // Navigoi automaattisesti takaisin aikaisempaan screeniin
                                 }, goToCategories = {

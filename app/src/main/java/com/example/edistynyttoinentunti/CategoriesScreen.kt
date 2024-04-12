@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.edistynyttoinentunti.model.CategoryItem
 import com.example.edistynyttoinentunti.viewmodel.CategoriesViewModel
 
 // Haetaan kuva lorem picsumista. Tehtiin tälle oma composable.
@@ -132,7 +133,7 @@ fun ConfirmCategoryDelete(onConfirm: () -> Unit, onCancel: () -> Unit, clearErr 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategoty: (Int) -> Unit) {
+fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategoty: (Int) -> Unit, size: WindowSizeInfo) {
     // Tämä on rakennusteline, joka antaa navigaatiolle raamit
     val categoriesVm: CategoriesViewModel = viewModel()
 
@@ -149,7 +150,7 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategoty: (Int) -> U
         },
 
         topBar = {
-        TopAppBar(title = { Text(text = stringResource(id = R.string.categories)) }, navigationIcon = {
+        TopAppBar(title = { Text(text = stringResource(id = R.string.categories))}, navigationIcon = {
             IconButton(onClick = { onMenuClick() }) {
                 Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
             }
@@ -204,45 +205,53 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategoty: (Int) -> U
 
 
                 // jos ei lataa niin näytetään sisältö näytöllä
-                else -> LazyVerticalGrid(columns = GridCells.Fixed(1)) {
-                    items(categoriesVm.categoriesState.value.list) {
-                        // Yksikkäinen itemi mikä näytetään näytöllä
-                        // Tämä on itemin scope
-                        Column(modifier = Modifier.fillMaxWidth()) {
-                            Row(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(15.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween) {
-                                // Kutsutaan random image composablea, jotta saadaan kuva näkyviin.
-                                RandomImage()
-                                Spacer(modifier = Modifier.width(16.dp))
-                                Column(horizontalAlignment = Alignment.End) {
-                                    Text(text = it.name,
-                                        fontWeight = FontWeight.SemiBold,
-                                        style = MaterialTheme.typography.headlineSmall,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
-                                    IconButton(onClick = { categoriesVm.verifyCategoryRemoval(it.id) }) {
-                                        Icon(
-                                            imageVector = Icons.Rounded.Delete,
-                                            contentDescription = "Kategorian poistonpainike")
-                                    }
-                                    IconButton(onClick = { navigateToEditCategoty(it.id) }) {
-                                        Icon(
-                                            imageVector = Icons.Rounded.Edit,
-                                            contentDescription = "Kategorian editointipainike")
-                                        // Tästä päästään editCategorySceeniin
-                                        // Lisäksi lisättiin nav hostiin mainActivityyn tämä
-                                        // it.id on jotta tiedetään mitä category itemiä klikataan!
-                                    }
-                                }
-                            }
+                else -> CategoriesList(categoriesVm.categoriesState.value.list, verifyCategoryRemoval = {categoryId ->
+                    categoriesVm.verifyCategoryRemoval(categoryId)
+                })
+            }
+        } // Box loppuu tähän
+    }
+}
+
+
+@Composable
+fun CategoriesList(categories: List<CategoryItem>, verifyCategoryRemoval : (Int) -> Unit) {
+    LazyVerticalGrid(columns = GridCells.Fixed(1)) {
+        items(categories) {
+            // Yksikkäinen itemi mikä näytetään näytöllä
+            // Tämä on itemin scope
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(15.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    // Kutsutaan random image composablea, jotta saadaan kuva näkyviin.
+                    RandomImage()
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Column(horizontalAlignment = Alignment.End) {
+                        Text(text = it.name,
+                            fontWeight = FontWeight.SemiBold,
+                            style = MaterialTheme.typography.headlineSmall,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        IconButton(onClick = { verifyCategoryRemoval(it.id) }) {
+                            Icon(
+                                imageVector = Icons.Rounded.Delete,
+                                contentDescription = "Kategorian poistonpainike")
+                        }
+                        IconButton(onClick = { navigateToEditCategoty(it.id) }) {
+                            Icon(
+                                imageVector = Icons.Rounded.Edit,
+                                contentDescription = "Kategorian editointipainike")
+                            // Tästä päästään editCategorySceeniin
+                            // Lisäksi lisättiin nav hostiin mainActivityyn tämä
+                            // it.id on jotta tiedetään mitä category itemiä klikataan!
                         }
                     }
                 }
             }
-        } // Box loppuu tähän
+        }
     }
 }
