@@ -133,7 +133,7 @@ fun ConfirmCategoryDelete(onConfirm: () -> Unit, onCancel: () -> Unit, clearErr 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategoty: (Int) -> Unit, size: WindowSizeInfo) {
+fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategory: (Int) -> Unit, size: WindowSizeInfo) {
     // Tämä on rakennusteline, joka antaa navigaatiolle raamit
     val categoriesVm: CategoriesViewModel = viewModel()
 
@@ -155,8 +155,8 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategoty: (Int) -> U
                 Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
             }
         } )
-    }) {
-    // Tähän tulee saada itemit CategoriesStatesta, joka sijaitsee CategoriesViewModelissa.
+    }) { it ->
+        // Tähän tulee saada itemit CategoriesStatesta, joka sijaitsee CategoriesViewModelissa.
         Box(modifier = Modifier
             .fillMaxSize()
             .padding(it)) {
@@ -205,9 +205,23 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategoty: (Int) -> U
 
 
                 // jos ei lataa niin näytetään sisältö näytöllä
-                else -> CategoriesList(categoriesVm.categoriesState.value.list, verifyCategoryRemoval = {categoryId ->
-                    categoriesVm.verifyCategoryRemoval(categoryId)
-                })
+                else -> {
+                    if(size.widthInfo is WindowType.Compact || size.widthInfo is WindowType.Medium) {
+                        CategoriesList(
+                            categoriesVm.categoriesState.value.list,
+                            verifyCategoryRemoval = {categoryId ->
+                            categoriesVm.verifyCategoryRemoval(categoryId)
+                        }, navigateToEditCategory)
+                    } else {
+                        CategoriesMobileOptimization(
+                            categories = categoriesVm.categoriesState.value.list,
+                            verifyCategoryRemoval = {categoryId ->
+                                categoriesVm.verifyCategoryRemoval(categoryId)
+                            },
+                            navigateToEditCategory = navigateToEditCategory
+                        )
+                    }
+                }
             }
         } // Box loppuu tähän
     }
@@ -215,7 +229,7 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategoty: (Int) -> U
 
 
 @Composable
-fun CategoriesList(categories: List<CategoryItem>, verifyCategoryRemoval : (Int) -> Unit) {
+fun CategoriesList(categories: List<CategoryItem>, verifyCategoryRemoval : (Int) -> Unit, navigateToEditCategory: (Int) -> Unit) {
     LazyVerticalGrid(columns = GridCells.Fixed(1)) {
         items(categories) {
             // Yksikkäinen itemi mikä näytetään näytöllä
@@ -241,7 +255,51 @@ fun CategoriesList(categories: List<CategoryItem>, verifyCategoryRemoval : (Int)
                                 imageVector = Icons.Rounded.Delete,
                                 contentDescription = "Kategorian poistonpainike")
                         }
-                        IconButton(onClick = { navigateToEditCategoty(it.id) }) {
+                        IconButton(onClick = { navigateToEditCategory(it.id) }) {
+                            Icon(
+                                imageVector = Icons.Rounded.Edit,
+                                contentDescription = "Kategorian editointipainike")
+                            // Tästä päästään editCategorySceeniin
+                            // Lisäksi lisättiin nav hostiin mainActivityyn tämä
+                            // it.id on jotta tiedetään mitä category itemiä klikataan!
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Tämä tehtiin mobiilioptimointia varten. 1 per rivi vaihtuu 2 per rivi, kun mennään isommalle näytölle.
+
+@Composable
+fun CategoriesMobileOptimization(categories: List<CategoryItem>, verifyCategoryRemoval : (Int) -> Unit, navigateToEditCategory: (Int) -> Unit) {
+    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+        items(categories) {
+            // Yksikkäinen itemi mikä näytetään näytöllä
+            // Tämä on itemin scope
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(15.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    // Kutsutaan random image composablea, jotta saadaan kuva näkyviin.
+                    RandomImage()
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Column(horizontalAlignment = Alignment.End) {
+                        Text(text = it.name,
+                            fontWeight = FontWeight.SemiBold,
+                            style = MaterialTheme.typography.headlineSmall,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        IconButton(onClick = { verifyCategoryRemoval(it.id) }) {
+                            Icon(
+                                imageVector = Icons.Rounded.Delete,
+                                contentDescription = "Kategorian poistonpainike")
+                        }
+                        IconButton(onClick = { navigateToEditCategory(it.id) }) {
                             Icon(
                                 imageVector = Icons.Rounded.Edit,
                                 contentDescription = "Kategorian editointipainike")
