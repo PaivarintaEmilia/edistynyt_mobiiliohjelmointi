@@ -141,7 +141,7 @@ class MainActivity : ComponentActivity() {
                                     scope.launch {
                                         drawerState.open()
                                     }
-                                }, navigateToEditCategoty = {
+                                }, navigateToEditCategory = {
                                     navController.navigate("${Screen.EditCategoryScreen.route}/${it}") // Tämä lisättiin, jotta päästään category screenistä editcategoryscreeniin
                                 }, size = windowSizeInfo) // Ei sulkuja koska ei haluta kutsua vaan lähetetään vain eteenpäin composable puussa
                             }
