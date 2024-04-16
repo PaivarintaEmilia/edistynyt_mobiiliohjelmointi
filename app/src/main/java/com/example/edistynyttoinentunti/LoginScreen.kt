@@ -29,7 +29,7 @@ import com.example.edistynyttoinentunti.viewmodel.LoginViewModel
 // Tämä oli aluksi siis MainActivityssa ja siirrettiin navigaation rakentamisen ajaksi tänne.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(goToCategories: () -> Unit){
+fun LoginScreen(goToCategories: () -> Unit, goToRegister: () -> Unit){
 
     val loginVm: LoginViewModel = viewModel()
 
@@ -108,6 +108,13 @@ fun LoginScreen(goToCategories: () -> Unit){
                             //goToCategories() // Navigoi meidät categories sceereeen. Composablessa kerrotaan mitä tässä oikeasti tapahtuu.
                         }) {
                         Text(text = "Login")
+                    }
+
+                    Button(
+                        onClick = {
+                            goToRegister()
+                        }) {
+                        Text(text = "Register")
                     }
                 }
             }

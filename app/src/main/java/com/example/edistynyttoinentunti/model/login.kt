@@ -13,19 +13,16 @@ data class LoginReqModel(
 )
 
 // Vastaus, kun login-tiedot on syötetty ja painetaan login-painiketta
-
 data class LoginResModel(
     val id: Int = 0, // Tämä on responsessa luotu id käyttäjälle. Oletusarvo on 0.
     @SerializedName("access_token")
     val accessToken: String = "", //Tämä tulee aina loginin yhteydessä. Vielä ei tarvitse tietää mistä on kyse.
     val username: String = "" // Tämän avulla voidaan luoda ilmoitus "Hei KÄyttäjä + username!"
 
-    )
-
+)
 
 
 // Logouttia varten uusi data class
-
 data class LogoutState(
     val loading: Boolean = false,
     val err: String? = null,
