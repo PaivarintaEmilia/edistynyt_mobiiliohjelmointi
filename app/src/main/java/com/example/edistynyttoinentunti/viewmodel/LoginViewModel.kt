@@ -67,6 +67,7 @@ class LoginViewModel(private val db: AccountDatabase = DbProvider.db) : ViewMode
                 // Kutsu
                 val res = authService.login(
                     LoginReqModel(
+                        // Asetetaan muuttujille arvot
                         username = _loginState.value.username,
                         password = _loginState.value.password
                     )
@@ -92,10 +93,6 @@ class LoginViewModel(private val db: AccountDatabase = DbProvider.db) : ViewMode
                 _loginState.value = _loginState.value.copy(loading = false)
 
             }
-
-
-
         }
     }
-
 }

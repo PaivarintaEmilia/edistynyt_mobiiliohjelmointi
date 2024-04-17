@@ -141,22 +141,36 @@ class MainActivity : ComponentActivity() {
                                     scope.launch {
                                         drawerState.open()
                                     }
-                                }, navigateToEditCategoty = {
+                                }, navigateToEditCategory = {
                                     navController.navigate("${Screen.EditCategoryScreen.route}/${it}") // Tämä lisättiin, jotta päästään category screenistä editcategoryscreeniin
                                 }, size = windowSizeInfo) // Ei sulkuja koska ei haluta kutsua vaan lähetetään vain eteenpäin composable puussa
                             }
+
                            composable(Screen.Login.route) {
                                LoginScreen(goToCategories = {
                                    navController.navigate(Screen.Categories.route) // CallBack löytyy loginScreen tiedostosta
+                               }, goToRegister = {
+                                   navController.navigate(Screen.RegisterScreen.route)
                                })
-                           }
+                            }
                             composable("editCategoryScreen/{category}") {
                                 EditCategoryScreen(backToCategories = {
                                     navController.navigateUp() // Navigoi automaattisesti takaisin aikaisempaan screeniin
                                 }, goToCategories = {
                                     navController.navigate(Screen.Categories.route)
                                 })
-                                }
+                            }
+
+                            // composable Registerylle. Siitä navigoidaan categories listaukseen ja loginiin.
+                            composable(Screen.RegisterScreen.route) {
+                                RegisterScreen(goToCategories = {
+                                    navController.navigate(Screen.Categories.route)
+                                }, backToLogin = {
+                                    navController.navigate(Screen.Login.route)
+                                })
+                            }
+
+
 
 
                         }

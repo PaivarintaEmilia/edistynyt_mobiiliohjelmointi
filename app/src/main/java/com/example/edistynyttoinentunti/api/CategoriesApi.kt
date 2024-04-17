@@ -58,5 +58,10 @@ interface CategoriesApi {
     suspend fun createCategory(@Body req: AddCategoryReq) : CategoryItem
 
 
+    // TESTI itemien listaamista kategorioittain
+    //@GET("category/{category_id}/items")
+    //suspend fun getCategoriesSortedByitems(@Path("id") id: Int): ItemCategoryResponse
+
+
 
 }
