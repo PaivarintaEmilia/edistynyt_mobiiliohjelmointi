@@ -1,5 +1,6 @@
 package com.example.edistynyttoinentunti
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -33,6 +35,18 @@ import com.example.edistynyttoinentunti.viewmodel.RegisterViewModel
 fun RegisterScreen(goToCategories: () -> Unit, backToLogin: () -> Unit){
 
     val registerVm: RegisterViewModel = viewModel()
+
+    Log.d("Emilia", registerVm.registerState.value.registerOk.toString())
+
+    // LaunchedEffect, joka seuraa onko kutsu onnistunut ja muuttaa muuttujan takaisin
+    // falseksi ja siirtyy categories-listaukseen, jos kaikki on ok.
+    LaunchedEffect(key1 = registerVm.registerState.value.registerOk) {
+        registerVm.setRegister(false)
+        //goToCategories() Tarkoitus on jättää tämä tähän mutta jos tämä on tässä niin Register-painikkeesta
+        // loginScreen-filusta ohjautuu suoraan cateogries-listaukseen? En saanut vielä selvitettyä
+    }
+
+    Log.d("Emilia2", registerVm.registerState.value.registerOk.toString())
 
 
     Scaffold(
@@ -54,6 +68,7 @@ fun RegisterScreen(goToCategories: () -> Unit, backToLogin: () -> Unit){
             .padding(it) ) {
 
             when {
+
                 registerVm.registerState.value.loading -> CircularProgressIndicator(
                     modifier = Modifier.align(
                         Alignment.Center
@@ -74,7 +89,7 @@ fun RegisterScreen(goToCategories: () -> Unit, backToLogin: () -> Unit){
                     OutlinedTextField(
                         value = registerVm.registerState.value.username,
                         onValueChange = {
-                            // Luo funktio joka asettaa käyttäjätunnuksen
+                            registerVm.setTextUsername(it)
                         },
                         placeholder = {
                             Text(text = "New username")
@@ -85,7 +100,7 @@ fun RegisterScreen(goToCategories: () -> Unit, backToLogin: () -> Unit){
                     OutlinedTextField(
                         value = registerVm.registerState.value.password,
                         onValueChange = {
-
+                             registerVm.setTextPassword(it) // Saadaan tekstikenttään tekstiä
                         },
                         placeholder = {
                             Text(text = "New password")
@@ -99,7 +114,8 @@ fun RegisterScreen(goToCategories: () -> Unit, backToLogin: () -> Unit){
                     Button(
                         enabled = registerVm.registerState.value.username != "" && registerVm.registerState.value.password != "",
                         onClick = {
-                            goToCategories() // Tämä siksi aikaa, että saadaan funktio luotua
+                            registerVm.register()
+                            goToCategories()
                         }) {
 
                         Text(text = "Register new user")

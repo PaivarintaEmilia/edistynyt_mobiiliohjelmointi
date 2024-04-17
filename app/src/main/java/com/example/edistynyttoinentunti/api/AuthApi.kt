@@ -5,6 +5,8 @@ package com.example.edistynyttoinentunti.api
 
 import com.example.edistynyttoinentunti.model.LoginReqModel
 import com.example.edistynyttoinentunti.model.LoginResModel
+import com.example.edistynyttoinentunti.model.RegisterReqModel
+import com.example.edistynyttoinentunti.model.RegisterResModel
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
@@ -24,6 +26,10 @@ interface AuthApi {
     // Kun kirjaudutaan ulos niin haetaan headerissa token, jotta tiedetään kuka kirjataan ulos
     @POST("auth/logout")
     suspend fun logout(@Header("Authorization") bearerToken: String)
+
+    // Kutsu rekisteröintiä varten
+    @POST("auth/register")
+    suspend fun register(@Body req: RegisterReqModel) : RegisterResModel
 
 
 }
