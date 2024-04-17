@@ -6,7 +6,11 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.edistynyttoinentunti.api.authService
 import com.example.edistynyttoinentunti.api.categoriesService
+import com.example.edistynyttoinentunti.login.AccountDatabase
+import com.example.edistynyttoinentunti.login.DbProvider
+import com.example.edistynyttoinentunti.login.DbProvider.db
 import com.example.edistynyttoinentunti.model.AddCategoryReq
 import com.example.edistynyttoinentunti.model.AddCategoryState
 import com.example.edistynyttoinentunti.model.CategoriesState
@@ -15,7 +19,7 @@ import com.example.edistynyttoinentunti.model.DeleteCAtegoryState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class CategoriesViewModel : ViewModel() {
+class CategoriesViewModel(private val db: AccountDatabase = DbProvider.db) : ViewModel() {
 
     // NÄMÄ STATET KOSKETTAVAT CATEGORIES-LISTAA
     // Tänne yhdistetään seuraavalla tunnilla Categories.kt tiedostossa olevat luokat
@@ -52,15 +56,25 @@ class CategoriesViewModel : ViewModel() {
             try {
                 _addCategoryState.value = _addCategoryState.value.copy(loading = true)
 
-                // Tästä tulee vastauksena päivitetty categoriaItem
-                val res = categoriesService.createCategory(
-                    AddCategoryReq(
-                        name = _addCategoryState.value.name
-                    )
-                )
+                val accessToken = db.accountDao().getToken()
 
-                // Lisätään res-muuttuja eli uusi categoria staten listaan
-                _categoriesState.value = _categoriesState.value.copy(list = _categoriesState.value.list + res)
+                accessToken?.let {
+
+                    authService.logout("Bearer $it")
+                    // Tästä tulee vastauksena päivitetty categoriaItem
+                    val res = categoriesService.createCategory(
+                        AddCategoryReq(
+                            name = _addCategoryState.value.name
+                        )
+                    )
+
+                    // Lisätään res-muuttuja eli uusi categoria staten listaan
+                    _categoriesState.value = _categoriesState.value.copy(list = _categoriesState.value.list + res)
+
+                }
+
+
+
 
                 // Suljetaan alert-ilmoitus, kun categorian lisäys on ok
                 toggleAddCategory()
@@ -107,26 +121,39 @@ class CategoriesViewModel : ViewModel() {
         viewModelScope.launch {
             try {
 
-                // Tehdään poisto requesti (Api-filessa) Deletestä ei tule responsea vain vastaus onko ok vai ei.
-                // TÄMÄ ON DB:TÄ VARTEN
-                categoriesService.removeCategory(categoryId)
+                val accessToken = db.accountDao().getToken()
 
-                // TÄMÄ ON SITÄ VARTEN, ETTÄ SAADAAN KÄYTTÖLIITTYMÄSTÄ MYÖS POISTETTUA TÄMÄ
-                // List sisältää kaikki category itemit listassa. Filtteröidään tämä lista.
-                val listOfCategories = _categoriesState.value.list.filter {
-                    // Yksittäinen category item on "it". Filtteri käy listan jokaisen itemin läpi. Jokaisella iteroinnilla it on tämän listan rown category
-                    // Eli jos listan category itemin id ei ole poistettavan categoryn id niin se lisätään listaan. Poistettava jätetään pois
-                    // Again --> Lista sisältää ne categoryItemit johon alla oleva ehto ei päde (lisätään siis listaan ja poistettava jää pois)
-                    categoryId != it.id
+                accessToken?.let {
+
+
+                    authService.logout("Bearer $it")
+
+                    // Tehdään poisto requesti (Api-filessa) Deletestä ei tule responsea vain vastaus onko ok vai ei.
+                    // TÄMÄ ON DB:TÄ VARTEN
+                    categoriesService.removeCategory(categoryId)
+
+                    // TÄMÄ ON SITÄ VARTEN, ETTÄ SAADAAN KÄYTTÖLIITTYMÄSTÄ MYÖS POISTETTUA TÄMÄ
+                    // List sisältää kaikki category itemit listassa. Filtteröidään tämä lista.
+                    val listOfCategories = _categoriesState.value.list.filter {
+                        // Yksittäinen category item on "it". Filtteri käy listan jokaisen itemin läpi. Jokaisella iteroinnilla it on tämän listan rown category
+                        // Eli jos listan category itemin id ei ole poistettavan categoryn id niin se lisätään listaan. Poistettava jätetään pois
+                        // Again --> Lista sisältää ne categoryItemit johon alla oleva ehto ei päde (lisätään siis listaan ja poistettava jää pois)
+                        categoryId != it.id
+                    }
+
+                    // Asetetaan uuden listan arvot list-muuttujaan
+                    _categoriesState.value = _categoriesState.value.copy(list = listOfCategories)
+                    // --> Nyt kun painetaan Delete-painiketta niin näytölle tulostuu uusi lista ilman poistettua categorya
+
+                    // Kun poisto on onnistunut niin muutetaan deleteState 0:ksi
+                    // Koska ehto on: jos id on suurempi kuin 0 niin näytetään alert niin ei näytetä alerttia enää kun poisto ok
+                    _deleteCategoryState.value = _deleteCategoryState.value.copy(id = 0)
+
+
+
                 }
 
-                // Asetetaan uuden listan arvot list-muuttujaan
-                _categoriesState.value = _categoriesState.value.copy(list = listOfCategories)
-                // --> Nyt kun painetaan Delete-painiketta niin näytölle tulostuu uusi lista ilman poistettua categorya
 
-                // Kun poisto on onnistunut niin muutetaan deleteState 0:ksi
-                // Koska ehto on: jos id on suurempi kuin 0 niin näytetään alert niin ei näytetä alerttia enää kun poisto ok
-                _deleteCategoryState.value = _deleteCategoryState.value.copy(id = 0)
 
 
 
@@ -161,11 +188,32 @@ class CategoriesViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 _categoriesState.value = _categoriesState.value.copy(loading = true) // Tämä on false Categories.kt puolella
+
+                val accessToken = db.accountDao().getToken()
+
+                accessToken?.let {
+
+                    authService.logout("Bearer $it")
+
+                    val response = categoriesService.getCategories()
+                    // Data tulee sisään. Huom käytetään luokkaa Categories.kt puolelta
+                    _categoriesState.value = categoriesState.value.copy(
+                        list = response.categories // Tämä tehtiin käsin tehdyn listan tilalle.
+                    )
+
+
+                }
+
+
                 val response = categoriesService.getCategories()
                 // Data tulee sisään. Huom käytetään luokkaa Categories.kt puolelta
                 _categoriesState.value = categoriesState.value.copy(
                     list = response.categories // Tämä tehtiin käsin tehdyn listan tilalle.
                 )
+
+
+
+
             } catch (e: Exception) {
                 _categoriesState.value = _categoriesState.value.copy(err=e.message)
             } finally {

@@ -32,6 +32,7 @@ abstract class AccountDao {
     @Query("SELECT accessToken FROM account ORDER BY id DESC LIMIT 1;")
     abstract suspend fun getToken() : String?
 
+
     // Uusi query poistamaan tokenit, kun kirjaudutaan ulos
     @Query("DELETE FROM account")
     abstract suspend fun removeToken()

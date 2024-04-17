@@ -33,6 +33,8 @@ fun LoginScreen(goToCategories: () -> Unit, goToRegister: () -> Unit){
 
     val loginVm: LoginViewModel = viewModel()
 
+
+
     // Virheilmoituksen lisäys tostiin niin näyttää siistimmältä
     // Uudet koodit alkavat tästä
     val context = LocalContext.current
