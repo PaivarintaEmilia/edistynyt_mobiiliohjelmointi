@@ -53,7 +53,7 @@ fun EditCategoryScreen(backToCategories : () -> Unit, goToCategories : () -> Uni
     // Alla luodaan komponentteja ja sisältöä näytölle
     Scaffold (
         topBar = {
-            TopAppBar(title = { Text(vm.categoryState.value.item.name) }, // Tämä on yläbannerin title, joka saadaan db:stä.
+            TopAppBar(title = { Text("Edit name") }, // Tämä on yläbannerin title, joka saadaan db:stä.
                 navigationIcon = {
                     IconButton(onClick = { backToCategories() }) {
                         Icon(imageVector = Icons.Default.ArrowBack,
@@ -89,6 +89,9 @@ fun EditCategoryScreen(backToCategories : () -> Unit, goToCategories : () -> Uni
                                 // Täällä kutsutaan setName funktiota, jotta saadaan uusi kategorian nimi asetettua
                                 // Kun se kirjoitetaan tekstikenttään
                                 vm.setName(it)
+                            },
+                            placeholder = {
+                                Text(text = "Uusi nimi...")
                             })
                         
                         // Lisätään tilaa eri komponenttien välille
