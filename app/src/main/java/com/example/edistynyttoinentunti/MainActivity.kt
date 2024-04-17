@@ -142,7 +142,7 @@ class MainActivity : ComponentActivity() {
                                         drawerState.open()
                                     }
                                 }, navigateToEditCategory = {
-                                    navController.navigate("${Screen.EditCategoryScreen.route}/${it}") // Tämä lisättiin, jotta päästään category screenistä editcategoryscreeniin
+                                    navController.navigate("editCategoryScreen/${it}") // Tämä lisättiin, jotta päästään category screenistä editcategoryscreeniin
                                 }, size = windowSizeInfo) // Ei sulkuja koska ei haluta kutsua vaan lähetetään vain eteenpäin composable puussa
                             }
 
@@ -153,7 +153,7 @@ class MainActivity : ComponentActivity() {
                                    navController.navigate(Screen.RegisterScreen.route)
                                })
                             }
-                            composable("editCategoryScreen/{category}") {
+                            composable("editCategoryScreen/{categoryId}") {
                                 EditCategoryScreen(backToCategories = {
                                     navController.navigateUp() // Navigoi automaattisesti takaisin aikaisempaan screeniin
                                 }, goToCategories = {
@@ -169,23 +169,7 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(Screen.Login.route)
                                 })
                             }
-
-
-
-
                         }
-                        /*AppNavigation(onMenuClick =  {
-                            // Tähän tulee menu iconin painikkeen painamisen toiminto, koska drawerState on täällä (CategoriesScreen)
-                            // NavigatorDrawerin state on täällä
-                            // Eli lisätään scopen sisään napin fukntiot.
-                            scope.launch {
-                                if(drawerState.currentValue == DrawerValue.Closed) {
-                                    drawerState.open() // Voi olla että jätetään vaan tämä koska nappia ei näy
-                                } else {
-                                    drawerState.close()
-                                }
-                            } // Tämä kaikki kommentoitu, koska opesta tämä oli sekavaa.
-                        }) */
                     }
                 }
             }
@@ -193,19 +177,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// TARKASTELE TÄTÄ VAIKKA POISTETTIINKIN
-// Tässä aletaan rakentamaan navigaatiota
-//@Composable
-//fun AppNavigation(onMenuClick: () -> Unit) {
-//    val navController = rememberNavController()
-    //NavHost(navController = navController, startDestination = "CategoriesScreen") {
-        // Kaikki elementit joihin pitää pystyä navigoimaan
-    //    composable(route = "CategoriesScreen") {
-    //        CategoriesScreen(onMenuClick) // Ei sulkuja koska ei haluta kutsua vaan lähetetään vain eteenpäin composable puussa
-    //    }
-
-    //} Otetaan tämä osa pois koska opettaja sanoi, että tämä sekoittaa kun meennään usean composablen läpi
-//}
 
 
 

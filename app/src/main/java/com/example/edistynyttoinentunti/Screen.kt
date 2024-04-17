@@ -6,7 +6,7 @@ sealed class Screen(val route: String) {
     data object Categories: Screen("categoriesScreen")
 
     data object PostsScreen: Screen("postsScreen")
-    data object EditCategoryScreen: Screen("editCategoryScreen")
+    data object EditCategoryScreen: Screen("editCategoryScreen/{categoryId}")
     data object RegisterScreen: Screen("registerScreen")
 
 }
