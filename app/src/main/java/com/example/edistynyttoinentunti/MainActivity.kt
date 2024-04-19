@@ -61,7 +61,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val vm: logOutViewModel = viewModel() // Logouttia varten yhdistettiin tänne. Tämä kokeilu
                     //LoginScreen() // Näin saadaan luotu composable näytölle (Piilotettiin navigaation teon alussa. Ehkä väliaikaisesti)
                     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed) // Tämä on suspend functio, koska tässä on animaatio. Suorittaa animaation ja sitten avautuu tai sulkeutuu.
                     val scope = rememberCoroutineScope() // Hampurilaisvalikon avaamista ja sulkemista varten tarvitaan scope (liittyi asyncronosiin funkitoihin)
@@ -108,16 +107,7 @@ class MainActivity : ComponentActivity() {
                                     label = { Text(text = "Log_out_drawer") },
                                     selected = false,
                                     onClick = { scope.launch {
-                                        vm.logout()
-                                        if (vm.logoutState.value.logoutOk) {
-                                            vm.setLogout(false)
-                                            navController.navigate(Screen.Login.route) {
-                                                popUpTo(Screen.Login.route) {
-                                                    inclusive = true
-                                                }
-                                            }
-                                        }
-
+                                        navController.navigate(Screen.LogOutScreen.route)
                                         drawerState.close() } },
                                     icon = {
                                         Icon(
@@ -167,6 +157,14 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(Screen.Categories.route)
                                 }, backToLogin = {
                                     navController.navigate(Screen.Login.route)
+                                })
+                            }
+
+                            composable(Screen.LogOutScreen.route) {
+                                LogOutScreen(goToLogin = {
+                                    navController.navigate(Screen.Login.route)
+                                }, backToCategories = {
+                                    navController.navigate(Screen.Categories.route)
                                 })
                             }
                         }

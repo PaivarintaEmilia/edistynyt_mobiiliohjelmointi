@@ -30,7 +30,10 @@ data class LoginResModel(
 data class LogoutState(
     val loading: Boolean = false,
     val err: String? = null,
-    val logoutOk: Boolean = false
+    val logoutOk: Boolean = false,
+    val logOutText: String = "Kirjaudu ulos",
+    // Painikkeen enablointi
+    val buttonEnable: Boolean = false
 )
 
 

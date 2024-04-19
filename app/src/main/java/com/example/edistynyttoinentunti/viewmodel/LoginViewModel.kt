@@ -21,6 +21,9 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(private val db: AccountDatabase = DbProvider.db) : ViewModel() {
 
+
+
+
     // Tätä voidaan muuttaa
     private val _loginState = mutableStateOf(LoginReqModel())
     // Tätä käytetään screenin puolella

@@ -23,6 +23,15 @@ class logOutViewModel(private val db: AccountDatabase = DbProvider.db) : ViewMod
         _logoutState.value = _logoutState.value.copy(logoutOk = ok)
     }
 
+    // Funktio painikkeen enablointia varten
+    fun enableButton(ok: Boolean) {
+        _logoutState.value = _logoutState.value.copy(buttonEnable = ok)
+    }
+
+    fun changeText() {
+        _logoutState.value = _logoutState.value.copy(logOutText = "Sinut on kirjattu ulos.")
+    }
+
     fun logout() {
         viewModelScope.launch {
             try {
