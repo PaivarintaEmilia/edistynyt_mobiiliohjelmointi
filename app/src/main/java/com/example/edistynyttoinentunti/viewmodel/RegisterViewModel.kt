@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.edistynyttoinentunti.api.authService
+import com.example.edistynyttoinentunti.login.DbProvider
 import com.example.edistynyttoinentunti.model.RegisterReqModel
 import kotlinx.coroutines.launch
 
@@ -43,15 +44,23 @@ class RegisterViewModel : ViewModel() {
                 _registerState.value = _registerState.value.copy(loading = true)
 
                 // Kutsu ja asetetaan arvot muuttujiin
-                val res = authService.register(
-                    RegisterReqModel(
-                        username = _registerState.value.username,
-                        password = _registerState.value.password
-                    )
-                )
+                // Otetaan tässäkin huomioon kirjautuminen tokenilla
+                val accessToken = DbProvider.db.accountDao().getToken()
 
-                // Tarkistetaan että kutsu toimii ja toimiihan se!
-                Log.d("Emilia", res.authUserId.toString())
+                accessToken?.let {
+
+                    val res = authService.register(
+                        RegisterReqModel(
+                            username = _registerState.value.username,
+                            password = _registerState.value.password
+                        )
+                    )
+
+                    // Tarkistetaan että kutsu toimii ja toimiihan se!
+                    Log.d("Emilia", res.authUserId.toString())
+
+                }
+
 
                 // Asetetaan muuttuja trueksi, kun kutsu on onnistunut
                 setRegister(true)

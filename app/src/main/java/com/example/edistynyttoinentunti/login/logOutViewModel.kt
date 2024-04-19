@@ -1,5 +1,6 @@
 package com.example.edistynyttoinentunti.login
 
+import android.util.Log
 import androidx.annotation.RestrictTo
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +23,15 @@ class logOutViewModel(private val db: AccountDatabase = DbProvider.db) : ViewMod
         _logoutState.value = _logoutState.value.copy(logoutOk = ok)
     }
 
+    // Funktio painikkeen enablointia varten
+    fun enableButton(ok: Boolean) {
+        _logoutState.value = _logoutState.value.copy(buttonEnable = ok)
+    }
+
+    fun changeText() {
+        _logoutState.value = _logoutState.value.copy(logOutText = "Sinut on kirjattu ulos.")
+    }
+
     fun logout() {
         viewModelScope.launch {
             try {
@@ -36,6 +46,7 @@ class logOutViewModel(private val db: AccountDatabase = DbProvider.db) : ViewMod
                     authService.logout("Bearer $it")
                     // Tyhjennetään tokenit
                     db.accountDao().removeToken()
+                    Log.d("emilia", "ok uloskirjautuminen")
                 }
 
                 // Kun logout on ok niin muutetaan logoutOk-muuttujan tilaa

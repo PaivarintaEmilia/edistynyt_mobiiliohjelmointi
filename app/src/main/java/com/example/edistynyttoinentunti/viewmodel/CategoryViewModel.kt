@@ -6,7 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.edistynyttoinentunti.api.authService
 import com.example.edistynyttoinentunti.api.categoriesService
+import com.example.edistynyttoinentunti.login.DbProvider.db
 import com.example.edistynyttoinentunti.model.CategoryState
 import com.example.edistynyttoinentunti.model.EditCategoryReq
 import kotlinx.coroutines.launch
@@ -52,9 +54,22 @@ class CategoryViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
         viewModelScope.launch {
             try {
                 _categoryState.value = _categoryState.value.copy(loading = true)
-                // Mikä tämä on ja mistä tämä koostuu?
-                categoriesService.editCategory(_categoryId, EditCategoryReq(name=_categoryState.value.item.name))
-                Log.d("Emilia", "done")
+
+
+                val accessToken = db.accountDao().getToken()
+
+                accessToken?.let {
+
+                    authService.logout("Bearer $it")
+
+                    categoriesService.editCategory(_categoryId, EditCategoryReq(name=_categoryState.value.item.name))
+                    Log.d("Emilia", "done")
+
+                }
+
+
+
+
                 setOk(true) // Kun categorian muokkaus onnistuu niin asetetaan ok-muuttuja trueksi, jotta EditScreenin launch effectissä tiedetään että setOk on true ja voidaan navigoida takaisin listaukseen
             } catch (e: Exception) {
                 _categoryState.value = _categoryState.value.copy(err = e.toString())
@@ -70,10 +85,25 @@ class CategoryViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
         viewModelScope.launch {
             try {
                 _categoryState.value = _categoryState.value.copy(loading = true)
-                // Kategorian haku api kyselyllä. CategoriesApi + Categories tiedostot
-                val res = categoriesService.getCategory(_categoryId)
-                // Eso qué es??
-                _categoryState.value = _categoryState.value.copy(item = res.category)
+
+                val accessToken = db.accountDao().getToken()
+
+                accessToken?.let {
+
+                    authService.logout("Bearer $it")
+
+                    // Kategorian haku api kyselyllä. CategoriesApi + Categories tiedostot
+                    val res = categoriesService.getCategory(_categoryId)
+                    // Eso qué es??
+                    _categoryState.value = _categoryState.value.copy(item = res.category)
+
+
+                }
+
+
+
+
+
             } catch (e: Exception) {
                 _categoryState.value = _categoryState.value.copy(err = e.toString())
             } finally {

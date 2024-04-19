@@ -17,7 +17,11 @@ data class LoginResModel(
     val id: Int = 0, // Tämä on responsessa luotu id käyttäjälle. Oletusarvo on 0.
     @SerializedName("access_token")
     val accessToken: String = "", //Tämä tulee aina loginin yhteydessä. Vielä ei tarvitse tietää mistä on kyse.
-    val username: String = "" // Tämän avulla voidaan luoda ilmoitus "Hei KÄyttäjä + username!"
+    val username: String = "", // Tämän avulla voidaan luoda ilmoitus "Hei KÄyttäjä + username!"
+    // Id kirjautumisen tunnistamista varten.
+    @SerializedName("auth_user_id")
+    val userId: Int = 0
+
 
 )
 
@@ -26,7 +30,10 @@ data class LoginResModel(
 data class LogoutState(
     val loading: Boolean = false,
     val err: String? = null,
-    val logoutOk: Boolean = false
+    val logoutOk: Boolean = false,
+    val logOutText: String = "Kirjaudu ulos",
+    // Painikkeen enablointi
+    val buttonEnable: Boolean = false
 )
 
 
