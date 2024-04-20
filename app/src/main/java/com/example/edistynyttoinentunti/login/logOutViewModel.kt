@@ -35,13 +35,24 @@ class logOutViewModel(private val db: AccountDatabase = DbProvider.db) : ViewMod
     fun logout() {
         viewModelScope.launch {
             try {
-
+                Log.d("emilia", "sisällä logOut funktiossa")
                 _logoutState.value = _logoutState.value.copy(loading = true)
 
                 // Requesti. Tarvitsee accessTokenin
                 // Saadaan access token DbProviderista
                 val accessToken = db.accountDao().getToken()
-                // Jos token ei ole null niin suoritetaan logOut-request
+
+                // KOODI VIAN TARKISTUKSEEN
+                if (accessToken == null) {
+                    Log.d("emilia", "No access token available.")
+                    _logoutState.value = _logoutState.value.copy(err = "No access token found.")
+                    //return@launch
+                }
+
+                // VIANETSINTÄ PÄÄTTYY
+
+                Log.d("emilia", "Logging out with token: $accessToken")
+
                 accessToken?.let {
                     authService.logout("Bearer $it")
                     // Tyhjennetään tokenit

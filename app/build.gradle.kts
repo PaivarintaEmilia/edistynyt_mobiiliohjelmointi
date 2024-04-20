@@ -68,6 +68,10 @@ dependencies {
     // Lisätään, jotta saadaan haettua kuva
     implementation("io.coil-kt:coil-compose:2.5.0")
 
+    // AuthApia varten, jos auttaa virheen korjauksessa
+    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+
+
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation("androidx.activity:activity-compose:1.7.0")

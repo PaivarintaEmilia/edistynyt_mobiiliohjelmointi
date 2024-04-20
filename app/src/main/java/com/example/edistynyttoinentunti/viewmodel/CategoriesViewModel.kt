@@ -60,7 +60,6 @@ class CategoriesViewModel(private val db: AccountDatabase = DbProvider.db) : Vie
 
                 accessToken?.let {
 
-                    authService.logout("Bearer $it")
                     // Tästä tulee vastauksena päivitetty categoriaItem
                     val res = categoriesService.createCategory(
                         AddCategoryReq(
@@ -125,8 +124,6 @@ class CategoriesViewModel(private val db: AccountDatabase = DbProvider.db) : Vie
 
                 accessToken?.let {
 
-
-                    authService.logout("Bearer $it")
 
                     // Tehdään poisto requesti (Api-filessa) Deletestä ei tule responsea vain vastaus onko ok vai ei.
                     // TÄMÄ ON DB:TÄ VARTEN

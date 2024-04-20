@@ -90,8 +90,6 @@ class CategoryViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
                 accessToken?.let {
 
-                    authService.logout("Bearer $it")
-
                     // Kategorian haku api kyselyllä. CategoriesApi + Categories tiedostot
                     val res = categoriesService.getCategory(_categoryId)
                     // Eso qué es??
