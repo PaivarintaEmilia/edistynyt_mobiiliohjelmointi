@@ -72,7 +72,7 @@ fun LogOutScreen( goToLogin: () -> Unit, backToCategories: () -> Unit){
                         Button(
                             enabled = !logOutVm.logoutState.value.buttonEnable,
                             onClick = {
-                            //logOutVm.logout();
+                            logOutVm.logout();
                             logOutVm.changeText();
                             logOutVm.enableButton(true)
                         }) {
