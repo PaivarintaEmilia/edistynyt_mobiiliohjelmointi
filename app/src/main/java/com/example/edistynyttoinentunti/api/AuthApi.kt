@@ -32,7 +32,7 @@ interface AuthApi {
     // Kun kirjaudutaan ulos niin haetaan headerissa token, jotta tiedetään kuka kirjataan ulos
     // HUOM KÄYTETÄÄN TÄTÄ MYÖS MUIDEN KUTSUJEN KANSSA VAIKKA ONKIN LOGOUT, JOTTA EI TARVITSE MUUTTAA NIMEÄ.
     @POST("auth/logout")
-    suspend fun logout(@Header("Authorization:") bearerToken: String)
+    suspend fun logout(@Header("Authorization") bearerToken: String)
 
     // Kutsu rekisteröintiä varten
     @POST("auth/register")
