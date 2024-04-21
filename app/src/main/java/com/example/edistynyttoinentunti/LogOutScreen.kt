@@ -22,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.edistynyttoinentunti.login.logOutViewModel
@@ -34,7 +35,7 @@ fun LogOutScreen( goToLogin: () -> Unit, backToCategories: () -> Unit){
 
     Scaffold (
         topBar = {
-            TopAppBar(title = { Text("LogOut") }, // Tämä on yläbannerin title, joka saadaan db:stä.
+            TopAppBar(title = { Text(text = stringResource(id = R.string.logOut)) }, // Tämä on yläbannerin title, joka saadaan db:stä.
                 navigationIcon = {
                     IconButton(onClick = { backToCategories() }) {
                         Icon(imageVector = Icons.Default.ArrowBack,
@@ -53,7 +54,7 @@ fun LogOutScreen( goToLogin: () -> Unit, backToCategories: () -> Unit){
                     modifier = Modifier.align(Alignment.Center)
                 )
 
-                logOutVm.logoutState.value.err != null -> Text("Virhe: ${logOutVm.logoutState.value.err}")
+                logOutVm.logoutState.value.err != null -> Text("Error: ${logOutVm.logoutState.value.err}")
 
                 else -> {
                     Column(
@@ -76,7 +77,7 @@ fun LogOutScreen( goToLogin: () -> Unit, backToCategories: () -> Unit){
                             logOutVm.changeText();
                             logOutVm.enableButton(true)
                         }) {
-                            Text("YES!")
+                            Text(text = stringResource(R.string.confirmLogOut))
                         }
 
                         Spacer(modifier = Modifier.height(25.dp))
@@ -85,7 +86,7 @@ fun LogOutScreen( goToLogin: () -> Unit, backToCategories: () -> Unit){
                             // Kun muuttuja on false niin button on enabladed
                             enabled = logOutVm.logoutState.value.buttonEnable,
                             onClick = { goToLogin(); logOutVm.enableButton(false) }) {
-                            Text("Log back in")
+                            Text(text = stringResource(R.string.logBackIn))
                         }
 
                     }

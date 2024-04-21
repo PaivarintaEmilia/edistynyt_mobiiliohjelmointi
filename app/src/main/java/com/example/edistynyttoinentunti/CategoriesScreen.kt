@@ -74,17 +74,17 @@ fun AddCategoryDialog(addCategory: () -> Unit, name: String, setName: (String) -
         onDismissRequest = { closeDialog() },
         confirmButton = {
                         TextButton(onClick = { addCategory() }) {
-                            Text("Save Category")
+                            Text(text = stringResource(R.string.saveCategory))
                         }
         },
-        title = { Text("Add category")},
+        title = { Text(text = stringResource(R.string.addCategory))},
         text = {
             OutlinedTextField(
                 value = name,
                 onValueChange = {newName ->
                 // Tässä päivitetään uusi arvo stateen, sen mukaan mitä käyttäjä kirjoittaa
                 setName(newName) },
-                placeholder = { Text("Category name n") })
+                placeholder = { Text(text = stringResource(R.string.categoryName)) })
         })
 }
 
@@ -116,17 +116,17 @@ fun ConfirmCategoryDelete(onConfirm: () -> Unit, onCancel: () -> Unit, clearErr 
 
     AlertDialog(onDismissRequest = { /*TODO*/ }, confirmButton = {
         TextButton(onClick = { onConfirm() }) {
-            Text("Delete")
+            Text(text = stringResource(R.string.delete))
         }        
     }, dismissButton = {
         // Tällä painikkeella tehdään poiston peruutus
         TextButton(onClick = { onCancel() }) {
-            Text("Cancel")
+            Text(text = stringResource(R.string.delete))
         }
     }, title = {
-        Text(text = "Are you sure you want to delete the category?")
+        Text(text = stringResource(R.string.deleteConfirmation))
     }, text = {
-        Text(text = "U sure??")
+        Text(text = stringResource(R.string.deleteConfirmationSecond))
     })
 }
 
@@ -145,7 +145,7 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategory: (Int) -> U
         // Tässä tulee + -painike, jolla voidaan lisätä categoria
         floatingActionButton = {
                                FloatingActionButton(onClick = { categoriesVm.toggleAddCategory() }) {
-                                   Icon(imageVector = Icons.Filled.Add, contentDescription = "Lisää categoria")
+                                   Icon(imageVector = Icons.Filled.Add, contentDescription = "Add category")
                                }
         },
 
@@ -186,7 +186,7 @@ fun CategoriesScreen(onMenuClick: () -> Unit, navigateToEditCategory: (Int) -> U
                 )
 
                 // Tämä tehtiin virheen tarkistusta varten
-                categoriesVm.categoriesState.value.err != null -> Text(text = "Tuli virhe: ${categoriesVm.categoriesState.value.err}")
+                categoriesVm.categoriesState.value.err != null -> Text(text = "Error: ${categoriesVm.categoriesState.value.err}")
 
                 // Tämä tehdään categorian poiston alert-viestin kutsua varten.
                 // Jos id on suurempi kuin 0 niin ollaan clickattu roskis-iconia ja näytetään alert-viesti
@@ -253,12 +253,12 @@ fun CategoriesList(categories: List<CategoryItem>, verifyCategoryRemoval : (Int)
                         IconButton(onClick = { verifyCategoryRemoval(it.id) }) {
                             Icon(
                                 imageVector = Icons.Rounded.Delete,
-                                contentDescription = "Kategorian poistonpainike")
+                                contentDescription = "Delete category")
                         }
                         IconButton(onClick = { navigateToEditCategory(it.id) }) {
                             Icon(
                                 imageVector = Icons.Rounded.Edit,
-                                contentDescription = "Kategorian editointipainike")
+                                contentDescription = "Edit category")
                             // Tästä päästään editCategorySceeniin
                             // Lisäksi lisättiin nav hostiin mainActivityyn tämä
                             // it.id on jotta tiedetään mitä category itemiä klikataan!

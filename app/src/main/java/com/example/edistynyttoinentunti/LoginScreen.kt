@@ -20,6 +20,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -57,12 +58,14 @@ fun LoginScreen(goToCategories: () -> Unit, goToRegister: () -> Unit){
     }
 
     Scaffold(topBar = {
-        TopAppBar(title = { Text("LogIn") })
+        TopAppBar(title = { Text(text = stringResource(id = R.string.logIn)) })
     }) {
 
         // Box (pinotaan z-akselilla) käytetään, sillä loading iconi oli hirveän iso.
         Box(
-            modifier = Modifier.fillMaxSize().padding(it)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
         ) {
             // Näyttää loading iconia. Eli jos loading on true -> näytetään iconia. Muuten näytetään login screeni. (when -> else)
             when {
@@ -73,7 +76,7 @@ fun LoginScreen(goToCategories: () -> Unit, goToRegister: () -> Unit){
                 )
 
                 loginVm.loginState.value.err != null -> {
-                    Text("Virhe: ${loginVm.loginState.value.err}")
+                    Text("Error: ${loginVm.loginState.value.err}")
                 }
 
 
@@ -88,7 +91,7 @@ fun LoginScreen(goToCategories: () -> Unit, goToRegister: () -> Unit){
                             loginVm.setUserName(newUsername) // Tällä haetaan funktio loginViewModel.kt tiedostosta
                         },
                         placeholder = {
-                            Text(text = "Username_hint")
+                            Text(text = stringResource(R.string.usernameHint))
                         }) //tämä on tekstikenttä, johon syötetään käyttäjätunnus
                     Spacer(modifier = Modifier.height(25.dp)) // Saadaan väliä
                     OutlinedTextField(
@@ -97,7 +100,7 @@ fun LoginScreen(goToCategories: () -> Unit, goToRegister: () -> Unit){
                             loginVm.setPassword(newPassword) // Tällä haetaan funktio loginViewModel.kt tiedostosta
                         },
                         placeholder = {
-                            Text(text = "Password_hint")
+                            Text(text = stringResource(R.string.passwordHint))
                         },
                         visualTransformation = PasswordVisualTransformation()
                     )
@@ -109,14 +112,14 @@ fun LoginScreen(goToCategories: () -> Unit, goToRegister: () -> Unit){
                             loginVm.login()
                             //goToCategories() // Navigoi meidät categories sceereeen. Composablessa kerrotaan mitä tässä oikeasti tapahtuu.
                         }) {
-                        Text(text = "Login")
+                        Text(text = stringResource(R.string.logIn))
                     }
 
                     Button(
                         onClick = {
                             goToRegister()
                         }) {
-                        Text(text = "Register")
+                        Text(text = stringResource(R.string.register))
                     }
                 }
             }

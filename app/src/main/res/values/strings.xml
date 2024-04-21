@@ -1,4 +1,45 @@
 <resources>
     <string name="app_name">EdistynytToinenTunti</string>
+    // Titles (+buttons)
     <string name="categories">Categories</string>
+    <string name="editName">Edit name</string>
+    <string name="register">Register</string>
+    <string name="logOut">Log Out</string>
+    <string name="logIn">Log In</string>
+
+    // Buttons, CategoriesScreen
+    <string name="saveCategory">Save category</string>
+    <string name="addCategory">Add category</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    // Placeholders, CategoriesScreen
+    <string name="categoryName">Category name</string>
+    // AlertDialog, CateogiresScreen
+    <string name="deleteConfirmation">Are you sure you want to delete this category?</string>
+    <string name="deleteConfirmationSecond">By deleting this category, it will be deleted permanently.</string>
+
+    // Buttons, EditCategoryScreen
+    <string name="edit">Edit</string>
+    // OutlinedTextField, EditCategoryScreen
+    <string name="newName">Uusi nimi</string>
+    // ContentDescription, EditCAtegoryScreen
+    <string name="backToCategories">Back to categories</string>
+
+    // Buttons, RegisterScreen
+    <string name="registerNewUser">Reksiteröi uusi käyttäjä</string>
+    // OutlinedTextField, RegisterScreen
+    <string name="newUsername">Uusi käyttäjätunnus</string>
+    <string name="newPassword">Uusi salasana</string>
+
+
+    // Buttons, LogOutScreen
+    <string name="confirmLogOut">Kirjaa minut ulos</string>
+    <string name="logBackIn">Kirjaudu sisään</string>
+
+    // OutlinedTextField, LoginScreen
+    <string name="usernameHint">Käyttäjätunnus</string>
+    <string name="passwordHint">Salasana</string>
+
+
+
 </resources>

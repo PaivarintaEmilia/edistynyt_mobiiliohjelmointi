@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -52,7 +53,7 @@ fun RegisterScreen(goToCategories: () -> Unit, backToLogin: () -> Unit){
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Register") },
+                title = { Text(text = stringResource(id = R.string.register)) },
                 navigationIcon = {
                     IconButton(onClick = { backToLogin() }) {
                         Icon(Icons.Default.ArrowBack,
@@ -76,7 +77,7 @@ fun RegisterScreen(goToCategories: () -> Unit, backToLogin: () -> Unit){
                 )
 
                 registerVm.registerState.value.err != null -> {
-                    Text("Virhe: ${registerVm.registerState.value.err}")
+                    Text("Error: ${registerVm.registerState.value.err}")
                 }
 
                 else -> Column(
@@ -92,7 +93,7 @@ fun RegisterScreen(goToCategories: () -> Unit, backToLogin: () -> Unit){
                             registerVm.setTextUsername(it)
                         },
                         placeholder = {
-                            Text(text = "New username")
+                            Text(text = stringResource(R.string.newUsername))
                         })
 
                     Spacer(modifier = Modifier.height(25.dp))
@@ -103,7 +104,7 @@ fun RegisterScreen(goToCategories: () -> Unit, backToLogin: () -> Unit){
                              registerVm.setTextPassword(it) // Saadaan tekstikenttään tekstiä
                         },
                         placeholder = {
-                            Text(text = "New password")
+                            Text(text = stringResource(R.string.newPassword))
                         },
                         visualTransformation = PasswordVisualTransformation()
 
@@ -118,7 +119,7 @@ fun RegisterScreen(goToCategories: () -> Unit, backToLogin: () -> Unit){
                             goToCategories()
                         }) {
 
-                        Text(text = "Register new user")
+                        Text(text = stringResource(R.string.registerNewUser))
                     }
                 }
             }

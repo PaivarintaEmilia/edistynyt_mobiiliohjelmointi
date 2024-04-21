@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -53,11 +54,11 @@ fun EditCategoryScreen(backToCategories : () -> Unit, goToCategories : () -> Uni
     // Alla luodaan komponentteja ja sisältöä näytölle
     Scaffold (
         topBar = {
-            TopAppBar(title = { Text("Edit name") }, // Tämä on yläbannerin title, joka saadaan db:stä.
+            TopAppBar(title = { Text(text = stringResource(id = R.string.editName)) }, // Tämä on yläbannerin title, joka saadaan db:stä.
                 navigationIcon = {
                     IconButton(onClick = { backToCategories() }) {
                         Icon(imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back to categories")
+                            contentDescription = stringResource(R.string.backToCategories))
                     }
                 })
         }
@@ -72,7 +73,7 @@ fun EditCategoryScreen(backToCategories : () -> Unit, goToCategories : () -> Uni
                     modifier = Modifier.align(Alignment.Center)
                 )
                 // Virheviestien varalle tehdään tämä
-                vm.categoryState.value.err != null -> Text("Virhe ${vm.categoryState.value.err}")
+                vm.categoryState.value.err != null -> Text("Error: ${vm.categoryState.value.err}")
                 else -> {
                     // Tässä aletaan rakentamaan käyttöliittymää categorian muokkausta varten
                     // Column stakkaa ylhäältä alaspäin
@@ -91,7 +92,7 @@ fun EditCategoryScreen(backToCategories : () -> Unit, goToCategories : () -> Uni
                                 vm.setName(it)
                             },
                             placeholder = {
-                                Text(text = "Uusi nimi...")
+                                Text(text = stringResource(R.string.newName))
                             })
                         
                         // Lisätään tilaa eri komponenttien välille
@@ -99,7 +100,7 @@ fun EditCategoryScreen(backToCategories : () -> Unit, goToCategories : () -> Uni
                         
                         // Luodaan painike
                         Button(onClick = { vm.editCategory() }) {
-                            Text("Edit")
+                            Text(text = stringResource(R.string.edit))
                         }
                         
                     }
