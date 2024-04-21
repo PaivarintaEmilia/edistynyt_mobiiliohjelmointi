@@ -161,8 +161,13 @@ class MainActivity : ComponentActivity() {
                             }
 
                             composable(Screen.LogOutScreen.route) {
-                                LogOutScreen(goToLogin = {
-                                    navController.navigate(Screen.Login.route)
+                                LogOutScreen(
+                                    goToLogin = {
+                                    navController.navigate(Screen.Login.route) {
+                                        popUpTo(Screen.Login.route) {
+                                            inclusive = true
+                                        }
+                                    }
                                 }, backToCategories = {
                                     navController.navigate(Screen.Categories.route)
                                 })
