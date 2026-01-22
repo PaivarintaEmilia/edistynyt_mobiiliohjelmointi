@@ -1,20 +1,20 @@
-# Ohjeet käyttöön ja toimintaan
+# Program Details
 
-## Ohjelmassa käytetään kurssilla saatua backendiä ja tietokantaa. Ohjelma sisältää kaikki tunnilla läpikäydyt perusasiat. 
+## The program uses the backend and database provided in the course.
 
-## Ohjelman sisältämät extra ominaisuudet:
+## Extra features included in the program:
 
-1. Ohjelma sisältää sisään ja uloskirjautumisen
+1. The program includes login and logout
 
-- Uloskirjautumisen vikaa ei saatu korjattua.
-- Uloskirjautumiselle on tehty oma ViewModel ja Screen. Screen sisältää tekstin, joka vaihtuu Kirjaa minut ulos-painiketta painamalla. Saman painikkeen tulisi hoitaa uloskirjautuminen.
-- Kun uloskirjautuminen on suoritettu, niin Kirjaudu sisään-painike enabloituu ja siitä pääsee takaisin Login-screeniin. LoginScreenistä ei pääse enää takaisin aikaisempaan LogOutScreeniin.
-- Room-tietokannan luominen onnistuu ja tokeni toimii normaalisti.
-- Eri toiminnallisuuksien suorituksen yhteydessä tarkistetaan ettei token ole null.
+- The logout issue could not be fixed.
+- Logout has its own ViewModel and Screen. The Screen contains text that changes when the “Log me out” button is pressed. The same button also handles the logout action.
+- Once logout is completed, the “Log in” button becomes enabled, and it takes the user back to the Login screen.
+- Creating the Room database works successfully, and the token works normally.
+- During different actions in the app, it is checked that the token is not null.
 
-2. Ohjelma sisältää myös rekisteröitymisen
+2. The program also includes registration
 
-- Rekisteröinnillä on oma ViewModel ja screen.
-- Rekisteröinnin yhteydessä luodaan uusi käyttäjätunnus tietokantaan.
+- Registration has its own ViewModel and Screen.
+- During registration, a new user account is created in the database.
 
-3. Ohjelmassa käytetään lokalisointia 
+3. The program uses localization
